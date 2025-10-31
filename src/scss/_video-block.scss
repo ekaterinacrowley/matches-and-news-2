@@ -1,0 +1,57 @@
+.video {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__title {
+        padding: 20px 0 40px;
+        font-family: Syne;
+        font-size: 103.4px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 103.37px; /* 99.971% */
+        letter-spacing: -5.169px;
+        background: linear-gradient(99deg, #FFF 11.68%, rgba(255, 255, 255, 0.00) 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        @media (max-width: 767px) {
+            font-size: 57.1px;
+            line-height: 57.12px; 
+            letter-spacing: -2.856px;
+            padding: 10px 0 40px;
+        }
+    }
+
+    &__container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 1400px;
+        height: 900px;
+        background: url(../images/video.webp) center/cover no-repeat;
+
+        @media (max-width: 767px) {
+            height: 468px;
+        }
+    }
+
+    &__link {
+        display: flex;
+        width: 117px;
+        height: 117px;
+        padding: 0 33px 0 33px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 104px;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(2.5px);
+        color: #FFF;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 19.2px;
+        margin-top: -25px;
+    }
+}
