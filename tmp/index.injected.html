@@ -2,13 +2,13 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Футбольные матчи по дате</title>
+<title>Матчи по дате</title>
 <style>
-body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #fff; padding: 40px 20px; }
+body { font-family: system-ui,sans-serif; background: #0f0f0f; color: #fff; padding: 40px 20px; }
 h1 { text-align: center; margin-bottom: 20px; }
 .date-picker { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 40px; }
-input[type="date"] { background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px 16px; font-size: 16px; outline: none; }
-button { background: #222; color: #fff; border: none; border-radius: 8px; padding: 10px 14px; font-size: 16px; cursor: pointer; }
+input[type="date"] { background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px 16px; font-size: 16px; }
+button { background: #222; color: #fff; border: none; border-radius: 8px; padding: 10px 14px; cursor: pointer; }
 button:hover { background: #333; }
 .leagues { max-width: 900px; margin: 0 auto; }
 .league { margin-bottom: 40px; background: #1a1a1a; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
@@ -16,7 +16,7 @@ button:hover { background: #333; }
 .league-header img { width: 40px; height: 40px; object-fit: contain; }
 .league-header h2 { font-size: 1.2rem; font-weight: 600; }
 .match { display: flex; align-items: center; justify-content: space-between; background: #222; border-radius: 12px; padding: 10px 16px; margin-bottom: 10px; }
-.team { flex: 1; text-align: center; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.team { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .match img { width: 32px; height: 32px; object-fit: contain; }
 .time { font-size: 13px; color: #aaa; min-width: 80px; text-align: center; }
 .live { color: #e53935; font-weight: bold; animation: blink 1s step-end infinite alternate; }
@@ -25,7 +25,7 @@ button:hover { background: #333; }
 </head>
 <body>
 
-<h1>⚽ Матчи по дате</h1>  
+<h1>⚽ Футбол и 🏏 Крикет по дате</h1>  
 
 <div class="date-picker"> 
   <button id="prevDay">⬅️</button> 
@@ -33,19 +33,20 @@ button:hover { background: #333; }
   <button id="nextDay">➡️</button>
 </div>
 
-<div class="leagues" id="leagues"></div>
- 
+<h2>Футбол</h2>
+<div class="leagues" id="footballLeagues"></div>
+
+<h2>Крикет</h2>
+<div class="leagues" id="cricketLeagues"></div>
+
 <script>
-// API key will be injected from .env at build/watch time
-const API_KEY = '76b6f309a4d1ff9512ec99c2dd0ad8e5';
-const leaguesContainer = document.getElementById('leagues');
+const footballContainer = document.getElementById('footballLeagues');
+const cricketContainer = document.getElementById('cricketLeagues');
 const dateInput = document.getElementById('matchDate');
 
-// Инициализация текущей даты
 let currentDate = new Date();
 dateInput.value = currentDate.toISOString().split("T")[0];
 
-// Обработчики кнопок
 document.getElementById('prevDay').addEventListener('click', () => changeDate(-1));
 document.getElementById('nextDay').addEventListener('click', () => changeDate(1));
 dateInput.addEventListener('change', loadMatches);
@@ -56,36 +57,30 @@ function changeDate(offset) {
   loadMatches();
 }
 
-// Загрузка матчей по выбранной дате
 async function loadMatches() {
   const dateStr = dateInput.value;
-  leaguesContainer.innerHTML = "<p>Загрузка матчей...</p>";
+  await Promise.all([loadFootballMatches(dateStr), loadCricketMatches()]);
+}
 
+// --- Футбол ---
+async function loadFootballMatches(dateStr) {
+  footballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const res = await fetch(`https://v3.football.api-sports.io/fixtures?date=${dateStr}`, {
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'v3.football.api-sports.io'
-      }
-    });
+    const res = await fetch(`/matches/football?date=${dateStr}`);
     const data = await res.json();
-
     if (!data.response || data.response.length === 0) {
-      leaguesContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
+      footballContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
       return;
     }
-
-    renderLeagues(data.response);
+    renderFootball(data.response);
   } catch (e) {
-    leaguesContainer.innerHTML = "<p>Ошибка загрузки матчей</p>";
+    footballContainer.innerHTML = "<p>Ошибка загрузки</p>";
     console.error(e);
   }
 }
 
-// Рендер лиг и матчей
-function renderLeagues(matches) {
-  leaguesContainer.innerHTML = "";
-
+function renderFootball(matches) {
+  footballContainer.innerHTML = "";
   const leaguesMap = {};
   matches.forEach(event => {
     const leagueId = event.league.id;
@@ -95,44 +90,51 @@ function renderLeagues(matches) {
 
   for (const leagueId in leaguesMap) {
     const { league, events } = leaguesMap[leagueId];
-
     const leagueEl = document.createElement('div');
     leagueEl.className = 'league';
-    leagueEl.innerHTML = `
-      <div class="league-header">
-        <img src="${league.logo}" alt="${league.name}">
-        <h2>${league.name}</h2> 
-      </div>
-    `;
-
+    leagueEl.innerHTML = `<div class="league-header"><img src="${league.logo}" alt="${league.name}"><h2>${league.name}</h2></div>`;
     events.forEach(event => {
       const status = event.fixture.status;
       const isLive = ['1H','2H','ET','P','LIVE','HT'].includes(status.short);
-  
       let displayTime;
-      if (isLive && status.elapsed !== null) {
-        displayTime = `<span class="live">LIVE ${status.elapsed}'</span>`; 
-      } else if (['FT','AET','P'].includes(status.short)) {
-        displayTime = `<strong>${event.goals.home ?? 0} - ${event.goals.away ?? 0}</strong>`;
-      } else {
-        displayTime = new Date(event.fixture.date).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-      }
-
+      if (isLive && status.elapsed !== null) displayTime = `<span class="live">LIVE ${status.elapsed}'</span>`; 
+      else if (['FT','AET','P'].includes(status.short)) displayTime = `<strong>${event.goals.home ?? 0} - ${event.goals.away ?? 0}</strong>`;
+      else displayTime = new Date(event.fixture.date).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
       const matchEl = document.createElement('div');
       matchEl.className = 'match';
       if (isLive) matchEl.classList.add('live');
-
-      matchEl.innerHTML = `
-        <div class="team"><img src="${event.teams.home.logo}" alt="${event.teams.home.name}">${event.teams.home.name}</div>
-        <div class="time">${displayTime}</div>
-        <div class="team">${event.teams.away.name}<img src="${event.teams.away.logo}" alt="${event.teams.away.name}"></div>
-      `;
-
+      matchEl.innerHTML = `<div class="team"><img src="${event.teams.home.logo}" alt="${event.teams.home.name}">${event.teams.home.name}</div><div class="time">${displayTime}</div><div class="team">${event.teams.away.name}<img src="${event.teams.away.logo}" alt="${event.teams.away.name}"></div>`;
       leagueEl.appendChild(matchEl);
     });
-
-    leaguesContainer.appendChild(leagueEl);
+    footballContainer.appendChild(leagueEl);
   }
+}
+
+// --- Крикет ---
+async function loadCricketMatches() {
+  cricketContainer.innerHTML = "<p>Загрузка...</p>";
+  try {
+    const res = await fetch("/matches/cricket");
+    const data = await res.json();
+    if (!data.data || data.data.length === 0) {
+      cricketContainer.innerHTML = "<p>Нет матчей</p>";
+      return;
+    }
+    renderCricket(data.data);
+  } catch (e) {
+    cricketContainer.innerHTML = "<p>Ошибка загрузки</p>";
+    console.error(e);
+  }
+}
+
+function renderCricket(matches) {
+  cricketContainer.innerHTML = "";
+  matches.forEach(match => {
+    const el = document.createElement('div');
+    el.className = 'match';
+    el.innerHTML = `<div class="team"><img src="${match.genericFlag}" alt="${match.name}">${match.name}</div>`;
+    cricketContainer.appendChild(el);
+  });
 }
 
 // Инициализация
