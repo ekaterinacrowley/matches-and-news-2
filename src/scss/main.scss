@@ -1,3 +1,5 @@
+@import 'variables';
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -8,24 +10,24 @@
 html {
   height: 100%;
   width: 100%;
-  margin: 0;
+  margin: 0; 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Syne", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.5; 
   position: relative;
   -webkit-text-size-adjust: none;
   margin: 0;
-  overflow-x: hidden;
-  background: #0D0D0D;
+  overflow-x: hidden; 
+  background: var(--main-100);
 }
 
-main {
+main {  
   overflow: hidden;
 }
 
@@ -73,8 +75,8 @@ p {
 
 .main-width {
   width: 100%;
-  max-width: 1352px;
-  padding: 0 16px;
+  max-width: 1440px;
+  padding: 0 24px;
   margin: 0 auto;
 } 
 
@@ -151,8 +153,5 @@ p {
 
 @import 'header';
 @import 'main-block';
-@import 'video-block';
-@import 'info-block';
-@import 'persons-block';
-@import 'cta-block';
 @import 'footer';
+ 

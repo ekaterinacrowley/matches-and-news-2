@@ -1,0 +1,32 @@
+[data-theme="light"] {
+    --bg: #F0F0F0, 100%;
+    --main-10:  #008AFF, 10%;
+    --main-100:  #008AFF, 100%;  
+    --main-4:  #008AFF, 4%;
+    --main-60: #008AFF, 60%;
+    --vulcan:  #090A12, 100%;
+    --vulcan-10:  #090A12, 10%;
+    --vulcan-4: #090A12, 5%;
+    --vulcan-40: #090A12, 40%;
+    --vulcan-60: #090A12, 60%;
+    --white-10: #FFFFFF, 10%;
+    --white-100: #FFFFFF, 100%;
+    --white-5: #FFFFFF, 5%;
+    --white-60: #FFFFFF, 60%;
+}
+[data-theme="dark"] {
+    --bg: #090A12, 100%;
+    --main-10:  #008AFF, 10%;
+    --main-100:  #008AFF, 100%;
+    --main-4:  #008AFF, 14%;
+    --main-60: #008AFF, 60%;
+    --vulcan:  #FFFFFF, 100%;
+    --vulcan-10:  #FFFFFF, 14%;
+    --vulcan-4: #FFFFFF, 5%;
+    --vulcan-40: #FFFFFF, 40%;
+    --vulcan-60: #FFFFFF, 60%;
+    --white-10: #091727, 10%;
+    --white-100: #091727, 100%;
+    --white-5: #091727, 5%;
+    --white-60: #091727, 60%;
+}

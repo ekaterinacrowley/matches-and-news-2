@@ -3,8 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Матчи по дате</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
 <style>
-body { font-family: system-ui,sans-serif; background: #0f0f0f; color: #fff; padding: 40px 20px; }
+
 h1 { text-align: center; margin-bottom: 20px; }
 .date-picker { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 40px; }
 input[type="date"] { background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px 16px; font-size: 16px; }
@@ -21,11 +27,21 @@ button:hover { background: #333; }
 .time { font-size: 13px; color: #aaa; min-width: 80px; text-align: center; }
 .live { color: #e53935; font-weight: bold; animation: blink 1s step-end infinite alternate; }
 @keyframes blink { 50% { opacity: 0.5; } }
+
+/* Добавленные стили для логотипов команд */
+.team-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 6px;
+  display: inline-block;
+}
+.vs { min-width: 200px; text-align: center; color: #ddd; }
 </style>
 </head>
-<body>
-
-<h1>⚽ Футбол и 🏏 Крикет по дате</h1>  
+<body data-theme="light">
+ <include src="header.html"></include> 
+<!-- <h1>⚽ Футбол и 🏏 Крикет по дате</h1>  
 
 <div class="date-picker"> 
   <button id="prevDay">⬅️</button> 
@@ -33,113 +49,30 @@ button:hover { background: #333; }
   <button id="nextDay">➡️</button>
 </div>
 
-<h2>Футбол</h2>
+<h2>Футбол</h2> 
 <div class="leagues" id="footballLeagues"></div>
 
 <h2>Крикет</h2>
 <div class="leagues" id="cricketLeagues"></div>
 
-<script>
-const footballContainer = document.getElementById('footballLeagues');
-const cricketContainer = document.getElementById('cricketLeagues');
-const dateInput = document.getElementById('matchDate');
+<h2>🏀 Баскетбол</h2>
+<div class="leagues" id="basketballLeagues"></div>
 
-let currentDate = new Date();
-dateInput.value = currentDate.toISOString().split("T")[0];
+<h2>🏐 Волейбол</h2>
+<div class="leagues" id="volleyballLeagues"></div>
 
-document.getElementById('prevDay').addEventListener('click', () => changeDate(-1));
-document.getElementById('nextDay').addEventListener('click', () => changeDate(1));
-dateInput.addEventListener('change', loadMatches);
+<div id="leagueTable"></div> -->
 
-function changeDate(offset) {
-  currentDate.setDate(currentDate.getDate() + offset);
-  dateInput.value = currentDate.toISOString().split("T")[0];
-  loadMatches();
-}
+<!-- Новости -->
+<!-- <h2>📰 Новости</h2>
+<div id="newsTopics" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"> -->
+  <!-- кнопки будут созданы скриптом; оставлено как контейнер для тем -->
+<!-- </div>
+<div id="newsContainer" style="max-width:900px;margin:0 auto;"></div> -->
 
-async function loadMatches() {
-  const dateStr = dateInput.value;
-  await Promise.all([loadFootballMatches(dateStr), loadCricketMatches()]);
-}
-
-// --- Футбол ---
-async function loadFootballMatches(dateStr) {
-  footballContainer.innerHTML = "<p>Загрузка...</p>";
-  try {
-    const res = await fetch(`/matches/football?date=${dateStr}`);
-    const data = await res.json();
-    if (!data.response || data.response.length === 0) {
-      footballContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
-      return;
-    }
-    renderFootball(data.response);
-  } catch (e) {
-    footballContainer.innerHTML = "<p>Ошибка загрузки</p>";
-    console.error(e);
-  }
-}
-
-function renderFootball(matches) {
-  footballContainer.innerHTML = "";
-  const leaguesMap = {};
-  matches.forEach(event => {
-    const leagueId = event.league.id;
-    if (!leaguesMap[leagueId]) leaguesMap[leagueId] = { league: event.league, events: [] };
-    leaguesMap[leagueId].events.push(event);
-  });
-
-  for (const leagueId in leaguesMap) {
-    const { league, events } = leaguesMap[leagueId];
-    const leagueEl = document.createElement('div');
-    leagueEl.className = 'league';
-    leagueEl.innerHTML = `<div class="league-header"><img src="${league.logo}" alt="${league.name}"><h2>${league.name}</h2></div>`;
-    events.forEach(event => {
-      const status = event.fixture.status;
-      const isLive = ['1H','2H','ET','P','LIVE','HT'].includes(status.short);
-      let displayTime;
-      if (isLive && status.elapsed !== null) displayTime = `<span class="live">LIVE ${status.elapsed}'</span>`; 
-      else if (['FT','AET','P'].includes(status.short)) displayTime = `<strong>${event.goals.home ?? 0} - ${event.goals.away ?? 0}</strong>`;
-      else displayTime = new Date(event.fixture.date).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-      const matchEl = document.createElement('div');
-      matchEl.className = 'match';
-      if (isLive) matchEl.classList.add('live');
-      matchEl.innerHTML = `<div class="team"><img src="${event.teams.home.logo}" alt="${event.teams.home.name}">${event.teams.home.name}</div><div class="time">${displayTime}</div><div class="team">${event.teams.away.name}<img src="${event.teams.away.logo}" alt="${event.teams.away.name}"></div>`;
-      leagueEl.appendChild(matchEl);
-    });
-    footballContainer.appendChild(leagueEl);
-  }
-}
-
-// --- Крикет ---
-async function loadCricketMatches() {
-  cricketContainer.innerHTML = "<p>Загрузка...</p>";
-  try {
-    const res = await fetch("/matches/cricket");
-    const data = await res.json();
-    if (!data.data || data.data.length === 0) {
-      cricketContainer.innerHTML = "<p>Нет матчей</p>";
-      return;
-    }
-    renderCricket(data.data);
-  } catch (e) {
-    cricketContainer.innerHTML = "<p>Ошибка загрузки</p>";
-    console.error(e);
-  }
-}
-
-function renderCricket(matches) {
-  cricketContainer.innerHTML = "";
-  matches.forEach(match => {
-    const el = document.createElement('div');
-    el.className = 'match';
-    el.innerHTML = `<div class="team"><img src="${match.genericFlag}" alt="${match.name}">${match.name}</div>`;
-    cricketContainer.appendChild(el);
-  });
-}
-
-// Инициализация
-loadMatches();
-</script>
+<!-- Подключаем вынесённый JS -->
+<!-- <script src="js/sports.js" defer></script>
+<script src="js/news.js" defer></script> -->
 
 </body>
 </html>
