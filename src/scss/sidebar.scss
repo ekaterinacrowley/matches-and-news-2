@@ -1,0 +1,63 @@
+.sidebar {
+    position: sticky;
+    left: -275px;
+    top: 0;
+    display: flex;
+    padding: 24px 24px 28px 0;
+    width: 275px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    align-self: stretch;  
+
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        &--leagues {
+            gap: 16px;
+        }
+
+        li {
+        
+            a {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                color: var(--vulcan-40);
+                
+                &:hover {
+                    color: var(--main-100, #008AFF);
+
+                    svg {
+                            fill: var(--main-100, #008AFF);
+                            fill-opacity: 1;
+                        }
+                }
+
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                span {
+                    display: flex;  
+                    align-items: center;
+                    justify-content: center;
+                    width: 24px;
+                    height: 24px;
+                    background: var(--main-100);
+                    opacity: 0.11;
+                    border-radius: 50%;
+                }
+            }
+            &:first-child a {
+                color: var(--main-100, #008AFF); 
+            }
+        }
+    }
+}
