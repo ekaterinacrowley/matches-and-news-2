@@ -8,36 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
-<style>
-
-h1 { text-align: center; margin-bottom: 20px; }
-.date-picker { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 40px; }
-input[type="date"] { background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px 16px; font-size: 16px; }
-button { background: #222; color: #fff; border: none; border-radius: 8px; padding: 10px 14px; cursor: pointer; }
-button:hover { background: #333; }
-.leagues { max-width: 900px; margin: 0 auto; }
-.league { margin-bottom: 40px; background: #1a1a1a; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
-.league-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.league-header img { width: 40px; height: 40px; object-fit: contain; }
-.league-header h2 { font-size: 1.2rem; font-weight: 600; }
-.match { display: flex; align-items: center; justify-content: space-between; background: #222; border-radius: 12px; padding: 10px 16px; margin-bottom: 10px; }
-.team { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.match img { width: 32px; height: 32px; object-fit: contain; }
-.time { font-size: 13px; color: #aaa; min-width: 80px; text-align: center; }
-.live { color: #e53935; font-weight: bold; animation: blink 1s step-end infinite alternate; }
-@keyframes blink { 50% { opacity: 0.5; } }
-
-/* Добавленные стили для логотипов команд */
-.team-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 6px;
-  display: inline-block;
-}
-.vs { min-width: 200px; text-align: center; color: #ddd; }
-</style>
 </head>
 <body data-theme="light">
  <header>
@@ -89,7 +59,7 @@ button:hover { background: #333; }
  <main class="main-width">
   <div class="sidebar">
     <ul class="sidebar__nav">
-        <li class="sidebar__nav-item">
+        <li class="sidebar__nav-item sidebar__nav-item--current">
             <a href="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#008AFF">
                     <path d="M20.7712 9.45469L13.2759 2.37938L13.2609 2.36532C12.9165 2.05008 12.4665 1.87525 11.9995 1.87525C11.5326 1.87525 11.0826 2.05008 10.7381 2.36532L10.7222 2.37938L3.22875 9.45469C3.03872 9.63051 2.88702 9.84365 2.78313 10.0808C2.67924 10.3179 2.62541 10.5739 2.625 10.8328V19.5C2.625 19.9973 2.82254 20.4742 3.17417 20.8258C3.52581 21.1775 4.00272 21.375 4.5 21.375H9C9.49728 21.375 9.97419 21.1775 10.3258 20.8258C10.6775 20.4742 10.875 19.9973 10.875 19.5V15.375H13.125V19.5C13.125 19.9973 13.3225 20.4742 13.6742 20.8258C14.0258 21.1775 14.5027 21.375 15 21.375H19.5C19.9973 21.375 20.4742 21.1775 20.8258 20.8258C21.1775 20.4742 21.375 19.9973 21.375 19.5V10.8328C21.3746 10.5739 21.3208 10.3179 21.2169 10.0808C21.113 9.84365 20.9613 9.63051 20.7712 9.45469ZM19.125 19.125H15.375V15C15.375 14.7538 15.3265 14.51 15.2323 14.2825C15.138 14.055 14.9999 13.8483 14.8258 13.6742C14.6517 13.5001 14.445 13.362 14.2175 13.2677C13.99 13.1735 13.7462 13.125 13.5 13.125H10.5C10.0027 13.125 9.52581 13.3225 9.17417 13.6742C8.82254 14.0258 8.625 14.5027 8.625 15V19.125H4.875V10.995L12 4.26844L19.125 10.995V19.125Z"></path>
@@ -176,9 +146,11 @@ button:hover { background: #333; }
         </li>
     </ul>
     <div class="sidebar__tabs">
-        <button class="sidebar__tab-button sidebar__tab-button--active">Football</button>
-        <button class="sidebar__tab-button">Cricket</button>
-        <button class="sidebar__tab-button">Basketball</button>
+        <div class="sidebar__tab-buttons">
+            <span class="sidebar__tab-button sidebar__tab-button--active">Football</span>
+            <span class="sidebar__tab-button">Cricket</span>
+            <span class="sidebar__tab-button">Basketball</span>
+        </div>
         <div class="sidebar__tab-content sidebar__tab-content--active">
             <ul class="sidebar__nav sidebar__nav--leagues">
                 <li class="sidebar__nav-item">
@@ -202,7 +174,7 @@ button:hover { background: #333; }
                 <li class="sidebar__nav-item sidebar__nav-item--see-more">
                     <a href="">
                         <span>
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M3.26498 5.20687C3.59086 4.90638 4.08987 4.93683 4.37954 5.27488L7.80331 9.27047C7.908 9.39263 8.09201 9.39263 8.19669 9.27047L11.6205 5.27488C11.9101 4.93683 12.4091 4.90638 12.735 5.20687C13.0609 5.50736 13.0903 6.025 12.8006 6.36305L9.3768 10.3586C8.64403 11.2138 7.35597 11.2138 6.6232 10.3586L3.19942 6.36305C2.90975 6.025 2.9391 5.50736 3.26498 5.20687Z" fill="#008AFF"></path>
                             </svg>
                         </span>
@@ -216,18 +188,46 @@ button:hover { background: #333; }
          <div class="sidebar__tab-content">
          </div>
     </div>
+    <div class="sidebar__app">
+        <a href="">
+            <img src="images/sidebar-app.webp" alt="App Icon">
+        </a>
+    </div>
 </div> 
+  <div class="content">
+    <div class="container">
+     <div class="sports">
+   <div class="sports__tabs">
+        <div class="sports__tab sports__tab--active" data-sport="football">Football</div>
+        <div class="sports__tab" data-sport="cricket">Cricket</div>
+        <div class="sports__tab" data-sport="basketball">Basketball</div>
+        <a class="sports__tab" data-sport="esports">eSports</a>
+        <div class="sports__tab" data-sport="volleyball">volleyball</div>
+        <a class="sports__tab" data-sport="others">Others</a>
+   </div> 
+   <div class="sports__container">
+         <div class="sports__content sports__content--active" data-container="football">
+            <div class="date-picker">
+                <button id="prevDay">Yesterday</button>
+                <button id="todayButton" class="active">Today</button> <!-- Кнопка для загрузки сегодняшних матчей -->
+                <button id="nextDay">Tomorrow</button>
+            </div>
+            <div class="leagues" id="footballLeagues"></div>
+         </div>
+         <div class="sports__content" data-container="cricket"></div>
+         <div class="sports__content" data-container="basketball"></div>
+         <div class="sports__content" data-container="esports"></div>
+          <div class="sports__content" data-container="volleyball"></div>
+          <div class="sports__content" data-container="others"></div>
+   </div>
+</div> 
+     </div>
+  </div>
  </main>
 <!-- <h1>⚽ Футбол и 🏏 Крикет по дате</h1>  
 
-<div class="date-picker"> 
-  <button id="prevDay">⬅️</button> 
-  <input type="date" id="matchDate"> 
-  <button id="nextDay">➡️</button>
-</div>
-
 <h2>Футбол</h2> 
-<div class="leagues" id="footballLeagues"></div>
+
 
 <h2>Крикет</h2>
 <div class="leagues" id="cricketLeagues"></div>
@@ -248,8 +248,8 @@ button:hover { background: #333; }
 <div id="newsContainer" style="max-width:900px;margin:0 auto;"></div> -->
 
 <!-- Подключаем вынесённый JS -->
-<!-- <script src="js/sports.js" defer></script>
-<script src="js/news.js" defer></script> -->
-
+<script src="js/sports.js" defer=""></script>
+<!-- <script src="js/news.js" defer></script> -->
+<script src="js/main.js" defer=""></script>
 </body>
 </html>

@@ -8,52 +8,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
-<style>
-
-h1 { text-align: center; margin-bottom: 20px; }
-.date-picker { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 40px; }
-input[type="date"] { background: #1a1a1a; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px 16px; font-size: 16px; }
-button { background: #222; color: #fff; border: none; border-radius: 8px; padding: 10px 14px; cursor: pointer; }
-button:hover { background: #333; }
-.leagues { max-width: 900px; margin: 0 auto; }
-.league { margin-bottom: 40px; background: #1a1a1a; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
-.league-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.league-header img { width: 40px; height: 40px; object-fit: contain; }
-.league-header h2 { font-size: 1.2rem; font-weight: 600; }
-.match { display: flex; align-items: center; justify-content: space-between; background: #222; border-radius: 12px; padding: 10px 16px; margin-bottom: 10px; }
-.team { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.match img { width: 32px; height: 32px; object-fit: contain; }
-.time { font-size: 13px; color: #aaa; min-width: 80px; text-align: center; }
-.live { color: #e53935; font-weight: bold; animation: blink 1s step-end infinite alternate; }
-@keyframes blink { 50% { opacity: 0.5; } }
-
-/* Добавленные стили для логотипов команд */
-.team-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 6px;
-  display: inline-block;
-}
-.vs { min-width: 200px; text-align: center; color: #ddd; }
-</style>
 </head>
 <body data-theme="light">
  <include src="header.html"></include> 
  <main class="main-width">
   <include src="sidebar.html"></include> 
+  <div class="content">
+    <div class="container">
+     <include src="sports.html"></include> 
+     </div>
+  </div>
  </main>
 <!-- <h1>⚽ Футбол и 🏏 Крикет по дате</h1>  
 
-<div class="date-picker"> 
-  <button id="prevDay">⬅️</button> 
-  <input type="date" id="matchDate"> 
-  <button id="nextDay">➡️</button>
-</div>
-
 <h2>Футбол</h2> 
-<div class="leagues" id="footballLeagues"></div>
+
 
 <h2>Крикет</h2>
 <div class="leagues" id="cricketLeagues"></div>
@@ -74,8 +43,8 @@ button:hover { background: #333; }
 <div id="newsContainer" style="max-width:900px;margin:0 auto;"></div> -->
 
 <!-- Подключаем вынесённый JS -->
-<!-- <script src="js/sports.js" defer></script>
-<script src="js/news.js" defer></script> -->
-
+<script src="js/sports.js" defer></script>
+<!-- <script src="js/news.js" defer></script> -->
+<script src="js/main.js" defer></script>
 </body>
 </html>

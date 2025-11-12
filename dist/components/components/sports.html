@@ -1,0 +1,25 @@
+<div class="sports">
+   <div class="sports__tabs">
+        <div class="sports__tab sports__tab--active" data-sport="football">Football</div>
+        <div class="sports__tab" data-sport="cricket">Cricket</div>
+        <div class="sports__tab" data-sport="basketball">Basketball</div>
+        <a class="sports__tab" data-sport="esports">eSports</a>
+        <div class="sports__tab" data-sport="volleyball">volleyball</div>
+        <a class="sports__tab" data-sport="others">Others</a>
+   </div> 
+   <div class="sports__container">
+         <div class="sports__content sports__content--active" data-container="football">
+            <div class="date-picker">
+                <button id="prevDay">Yesterday</button>
+                <button id="todayButton" class="active">Today</button> <!-- Кнопка для загрузки сегодняшних матчей -->
+                <button id="nextDay">Tomorrow</button>
+            </div>
+            <div class="leagues" id="footballLeagues"></div>
+         </div>
+         <div class="sports__content" data-container="cricket"></div>
+         <div class="sports__content" data-container="basketball"></div>
+         <div class="sports__content" data-container="esports"></div>
+          <div class="sports__content" data-container="volleyball"></div>
+          <div class="sports__content" data-container="others"></div>
+   </div>
+</div>
