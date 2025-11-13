@@ -2,91 +2,133 @@ const footballContainer = document.getElementById('footballLeagues');
 const cricketContainer = document.getElementById('cricketLeagues');
 const basketballContainer = document.getElementById('basketballLeagues');
 const volleyballContainer = document.getElementById('volleyballLeagues');
-const dateInput = document.getElementById('matchDate');
 
+// Храним текущие даты для каждого вида спорта
+const currentDates = {
+  football: new Date(),
+  cricket: new Date()
+};
 
+// Выносим formatDate наружу, чтобы она была доступна везде
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
-// async function loadMatches() { 
-//   const dateStr = dateInput.value;
-//   await Promise.all([
-//     loadFootballMatches(dateStr),
-//     loadCricketMatches(dateStr),
-//     loadBasketballMatches(dateStr),
-//     loadVolleyballMatches(dateStr)
-//   ]);
-// }
+async function loadMatches() {
+  await Promise.all([
+    loadFootballMatches(formatDate(currentDates.football)),
+    loadCricketMatches(formatDate(currentDates.cricket)),
+    loadBasketballMatches(formatDate(currentDates.football)),
+    loadVolleyballMatches(formatDate(currentDates.football))
+  ]);
+}
 
 // --- Футбол ---
-// Ограничение футболa по ключевым словам (нижний регистр)
 const allowedFootballKeywords = [
   'Premier League', 'Saudi Pro League', 'English Premier League', 'sudan', 'UEFA Champions League', 'oman',
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-    const prevDayButton = document.getElementById('prevDay');
-    const todayButton = document.getElementById('todayButton');
-    const nextDayButton = document.getElementById('nextDay');
+  // Инициализация всех видов спорта
+  loadMatches();
 
-    // Функция для форматирования даты в нужном формате (YYYY-MM-DD)
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // добавляем 0 для месяцев с 1-значным числом
-        const day = String(date.getDate()).padStart(2, '0'); // добавляем 0 для дней с 1-значным числом
-        return `${year}-${month}-${day}`;
+  // Обработчики для футбола
+  const footballPicker = document.getElementById('footballDatePicker');
+  if (footballPicker) {
+    const prevBtn = footballPicker.querySelector('.prevDay');
+    const todayBtn = footballPicker.querySelector('.todayButton');
+    const nextBtn = footballPicker.querySelector('.nextDay');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        footballPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+        prevBtn.classList.add('active');
+        
+        currentDates.football.setDate(currentDates.football.getDate() - 1);
+        loadFootballMatches(formatDate(currentDates.football));
+      });
     }
 
-    // Функция для загрузки матчей по выбранной дате
-    function loadMatchesByDate(dateStr) {
-        loadFootballMatches(dateStr);
+    if (todayBtn) {
+      todayBtn.addEventListener('click', () => {
+        footballPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+        todayBtn.classList.add('active');
+        
+        currentDates.football = new Date();
+        loadFootballMatches(formatDate(currentDates.football));
+      });
     }
 
-    // Загрузка матчей для текущей даты
-    const today = new Date();
-    loadMatchesByDate(formatDate(today));
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        footballPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+        nextBtn.classList.add('active');
+        
+        currentDates.football.setDate(currentDates.football.getDate() + 1);
+        loadFootballMatches(formatDate(currentDates.football));
+      });
+    }
+  }
 
-    // Кнопка "Вчера"
-    prevDayButton.addEventListener('click', () => {
-        prevDayButton.classList.add('active');
-        todayButton.classList.remove('active');
-        nextDayButton.classList.remove('active');
-        const prevDay = new Date(today);
-        prevDay.setDate(today.getDate() - 1);
-        loadMatchesByDate(formatDate(prevDay));
-    });
+  // Обработчики для крикета
+  const cricketPicker = document.getElementById('cricketDatePicker');
+  if (cricketPicker) {
+    const prevPrevBtn = cricketPicker.querySelector('.prevPrevDay');
+    const prevBtn = cricketPicker.querySelector('.prevDay');
+    const todayBtn = cricketPicker.querySelector('.todayButton');
 
-    // Кнопка "Сегодня"
-    todayButton.addEventListener('click', () => {
-        prevDayButton.classList.remove('active');
-        todayButton.classList.add('active');
-        nextDayButton.classList.remove('active');
-        loadMatchesByDate(formatDate(today)); // Загружаем матчи на текущий день
-    });
+    if (prevPrevBtn) {
+      prevPrevBtn.addEventListener('click', () => {
+        cricketPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+        prevPrevBtn.classList.add('active');
+        
+        currentDates.cricket.setDate(currentDates.cricket.getDate() - 2);
+        loadCricketMatches(formatDate(currentDates.cricket));
+      });
+    }
 
-    // Кнопка "Завтра"
-    nextDayButton.addEventListener('click', () => {
-        prevDayButton.classList.remove('active');
-        todayButton.classList.remove('active');
-        nextDayButton.classList.add('active');  
-        const nextDay = new Date(today);
-        nextDay.setDate(today.getDate() + 1);
-        loadMatchesByDate(formatDate(nextDay));
-    });
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        cricketPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+        prevBtn.classList.add('active');
+        
+        currentDates.cricket.setDate(currentDates.cricket.getDate() - 1);
+        loadCricketMatches(formatDate(currentDates.cricket));
+      });
+    }
+
+    if (todayBtn) {
+      todayBtn.addEventListener('click', () => {
+        cricketPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+        todayBtn.classList.add('active');
+        
+        currentDates.cricket = new Date();
+        loadCricketMatches(formatDate(currentDates.cricket));
+      });
+    }
+  }
 });
 
+
+// --- Футбол --- 
+
 async function loadFootballMatches(dateStr) {
-    footballContainer.innerHTML = "<p>Загрузка...</p>";
-    try {
-        const res = await fetch(`/matches/football?date=${dateStr}`);
-        const data = await res.json();
-        if (!data.response || data.response.length === 0) {
-            footballContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
-            return;
-        }
-        renderFootball(data.response);
-    } catch (e) {
-        footballContainer.innerHTML = "<p>Ошибка загрузки</p>";
-        console.error(e);
+  footballContainer.innerHTML = "<p>Загрузка...</p>";
+  try {
+    const res = await fetch(`/matches/football?date=${dateStr}`);
+    const data = await res.json();
+    if (!data.response || data.response.length === 0) {
+      footballContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
+      return;
     }
+    renderFootball(data.response);
+  } catch (e) {
+    footballContainer.innerHTML = "<p>Ошибка загрузки</p>";
+    console.error(e);
+  }
 }
 
 function isAllowedFootball(event) {
@@ -105,17 +147,14 @@ function isAllowedFootball(event) {
 function renderFootball(matches) {
   footballContainer.innerHTML = "";
 
-  // фильтруем матчи по ключевым словам (лига или команды)
   let filtered = matches.filter(isAllowedFootball);
 
   if (!filtered.length) {
     console.log('[DEBUG] No matches found, adding top 3 leagues');
-    // Если нет матчей, добавляем первые 3 лиги
     const firstThreeMatches = matches.slice(0, 3);
-    filtered = [...firstThreeMatches]; // добавляем в список первые 3 лиги
+    filtered = [...firstThreeMatches];
   }
 
-  // Группируем матчи по лигам
   const leaguesMap = {};
   filtered.forEach(event => {
     const leagueId = event.league.id;
@@ -123,19 +162,16 @@ function renderFootball(matches) {
     leaguesMap[leagueId].events.push(event);
   });
 
-  // Проверяем количество лиг в отфильтрованном списке
   const filteredLeagues = Object.keys(leaguesMap).length;
 
-  // Если лиг меньше 3, добавляем недостающие лиги сверху
   if (filteredLeagues < 3) {
     const additionalMatches = matches.filter(event => {
       const leagueId = event.league.id;
-      return !leaguesMap[leagueId]; // Добавляем только те лиги, которые не вошли в filtered
-    }).slice(0, 3 - filteredLeagues); // Ограничиваем количеством, чтобы не превышать 3
+      return !leaguesMap[leagueId];
+    }).slice(0, 3 - filteredLeagues);
     filtered = [...filtered, ...additionalMatches];
   }
 
-  // Рендерим отфильтрованные и добавленные матчи
   filtered.forEach(event => {
     const leagueId = event.league.id;
     if (!leaguesMap[leagueId]) leaguesMap[leagueId] = { league: event.league, events: [] };
@@ -154,14 +190,12 @@ function renderFootball(matches) {
       if (isLive && status.elapsed !== null) displayTime = `<span class="live">LIVE ${status.elapsed}'</span><strong>${event.goals.home ?? 0} - ${event.goals.away ?? 0}</strong><span class="watch">Watch</span>`; 
       else if (['FT','AET','P'].includes(status.short)) displayTime = `<strong>${event.goals.home ?? 0} - ${event.goals.away ?? 0}</strong><span class="hightlights">Hightlights</span>`;
       else {
-          // Форматируем дату как "2 Nov, 21:30"
           const matchDate = new Date(event.fixture.date);
          displayTime = `<strong>${matchDate.toLocaleString('en-GB', { 
           day: 'numeric', 
           month: 'short', 
           hour: '2-digit', 
-          minute: '2-digit',
-          hour12: true 
+          minute: '2-digit'
         }).replace(',', '')}</strong><span class="watch">Watch</span>`;
       }
 
@@ -176,16 +210,18 @@ function renderFootball(matches) {
 }
 
 // --- Крикет ---
-
-// Загружаем матчи
-async function loadCricketMatches() {
+async function loadCricketMatches(dateStr) {
+  console.log("=== loadCricketMatches START ===");
+  console.log("Received date parameter:", dateStr);
+  console.log("cricketContainer:", cricketContainer);
+  
   cricketContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const res = await fetch("/matches/cricket");
+    console.log("Making fetch request to:", `/matches/cricket?date=${dateStr}`);
+    const res = await fetch(`/matches/cricket?date=${dateStr}`);
     const data = await res.json();
     console.log("Cricket API response:", data);
     
-    // Исправляем здесь - используем data.data вместо data.matches
     if (!data.data || data.data.length === 0) {
       console.log("No matches found or empty array");
       cricketContainer.innerHTML = "<p>Нет матчей</p>";
@@ -193,41 +229,35 @@ async function loadCricketMatches() {
     }
     
     console.log(`Found ${data.data.length} matches, proceeding to render`);
-    renderCricket(data.data); // Передаем data.data вместо data.matches
+    renderCricket(data.data, dateStr);
   } catch (e) {
     console.error("Error loading matches:", e);
     cricketContainer.innerHTML = "<p>Ошибка загрузки</p>";
   }
+  console.log("=== loadCricketMatches END ===");
 }
-
-// Группировка матчей по дате (исправленная)
 function sortAndGroupMatches(matches) {
   console.log("sortAndGroupMatches called with:", matches);
   
+  // Преобразуем дату в формате ISO в строку вида "YYYY-MM-DD"
   matches.forEach(match => {
-    // Используем свойство date вместо dateTimeGMT
     const dateString = match.date || match.dateTimeGMT;
-    
     if (!dateString) {
       console.warn("Missing date for match:", match);
       match.dateOnly = "unknown";
       return;
     }
-    
     const matchDate = new Date(dateString);
-    
-    // Проверяем, что дата валидна
     if (isNaN(matchDate.getTime())) {
       console.warn("Invalid date:", dateString, "for match:", match);
       match.dateOnly = "invalid";
       return;
     }
-    
+    // Преобразуем в строку "YYYY-MM-DD"
     match.dateOnly = matchDate.toISOString().split('T')[0];
     console.log(`Match date: ${dateString} -> ${match.dateOnly}`);
   });
 
-  // Фильтруем матчи с валидными датами
   const validMatches = matches.filter(match => 
     match.dateOnly && match.dateOnly !== "unknown" && match.dateOnly !== "invalid"
   );
@@ -248,57 +278,64 @@ function sortAndGroupMatches(matches) {
   return groupedMatches;
 }
 
-// Отображение матчей (исправленное)
-function renderCricket(matches) {
+function renderCricket(matches, selectedDate) {
   console.log("renderCricket called with matches:", matches);
+  console.log(`Selected date: "${selectedDate}"`);
   cricketContainer.innerHTML = "";
   
-  const selectedDate = dateInput.value;
-  console.log(`Selected date from input: "${selectedDate}"`);
-
   try {
     const groupedMatches = sortAndGroupMatches(matches);
     console.log("Available dates:", Object.keys(groupedMatches));
+    console.log("Looking for date:", selectedDate);
 
     if (groupedMatches[selectedDate] && groupedMatches[selectedDate].length > 0) {
-      console.log(`Found ${groupedMatches[selectedDate].length} matches for ${selectedDate}`);
+      console.log(`✓ Found ${groupedMatches[selectedDate].length} matches for ${selectedDate}`);
       
-      const dateHeader = document.createElement('h3');
-      dateHeader.textContent = selectedDate;
-      cricketContainer.appendChild(dateHeader);
-
       groupedMatches[selectedDate].forEach(match => {
         const matchEl = document.createElement('div');
-        matchEl.className = 'match';
+        matchEl.className = 'match match--cricket';
         
-        // Используем свойство date для отображения
-        const displayDate = match.date ? new Date(match.date).toLocaleString() : 'Дата не указана';
+        // Форматируем дату в формат "14 Nov 15:00"
+        let displayDate = 'Дата не указана';
+        if (match.date) {
+          const matchDate = new Date(match.date);
+          displayDate = matchDate.toLocaleString('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          }).replace(',', '');
+        }
         
         matchEl.innerHTML = `
           <div class="team">
             <img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}">
             ${match.teamInfo[0]?.shortname || match.teamInfo[0]?.name}
           </div>
-          <div class="status">${match.status}</div>
+          <div class="info">
+            <div class="date">${displayDate}</div>
+            <div class="status">${match.status}</div>
+          </div>
           <div class="team">
             <img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}">
             ${match.teamInfo[1]?.shortname || match.teamInfo[1]?.name}
           </div>
-          <div class="date">${displayDate}</div>
         `;
         
         cricketContainer.appendChild(matchEl);
       });
     } else {
-      console.log(`No matches found for selected date: "${selectedDate}"`);
+      console.log(`✗ No matches found for selected date: "${selectedDate}"`);
       console.log("Available dates are:", Object.keys(groupedMatches));
-      cricketContainer.innerHTML = "<p>Нет матчей на выбранную дату</p>";
+      cricketContainer.innerHTML = `<p>Нет матчей на ${selectedDate}</p>`;
     }
   } catch (error) {
     console.error("Error in renderCricket:", error);
     cricketContainer.innerHTML = "<p>Ошибка при отображении матчей</p>";
   }
 }
+
 // --- Баскетбол ---
 async function loadBasketballMatches(dateStr) {
   basketballContainer.innerHTML = "<p>Загрузка...</p>";
@@ -307,7 +344,6 @@ async function loadBasketballMatches(dateStr) {
     const data = await res.json();
     console.log("Basketball API response:", data);
 
-    // ограничим вывод первыми тремя лигами
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
       basketballContainer.innerHTML = "<p>Нет матчей</p>";
@@ -316,7 +352,6 @@ async function loadBasketballMatches(dateStr) {
 
     basketballContainer.innerHTML = "";
 
-    // Проходим по лигам (используем переменную leagues вместо data.data)
     leagues.forEach(leagueBlock => {
       const league = leagueBlock.league;
       const matches = leagueBlock.matches;
@@ -327,27 +362,26 @@ async function loadBasketballMatches(dateStr) {
       leagueEl.className = 'league';
       leagueEl.innerHTML = `
         <div class="league__header">
-          <img src="${league.logo}" alt="${league.name}">
+          <div class="league__logo"><img src="${league.logo}" alt="${league.name}"></div>
           <h2>${league.name}</h2>
         </div>
       `;
 
       matches.forEach(match => {
-        const displayTime = match.date ? new Date(match.date).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '';
+        // const displayTime = match.date ? new Date(match.date).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '';
 
         const matchEl = document.createElement('div');
         matchEl.className = 'match';
         matchEl.innerHTML = `
           <div class="team">
-            <img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}">
+            <div class="team__logo"><img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}"></div>
             ${match.teamInfo[0]?.name}
           </div>
-          <div class="status">${match.status}</div>
-          <div class="team">
-            <img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}">
+          <div class="time time--status">${match.status}</div>
+          <div class="team team--2">
             ${match.teamInfo[1]?.name}
+            <div class="team__logo"><img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}"></div>
           </div>
-          <div class="time">${displayTime}</div>
         `;
         leagueEl.appendChild(matchEl);
       });
@@ -361,7 +395,7 @@ async function loadBasketballMatches(dateStr) {
   }
 }
 
-// новый загрузчик волейбола (по тому же принципу)
+// --- Волейбол ---
 async function loadVolleyballMatches(dateStr) {
   volleyballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
@@ -369,7 +403,6 @@ async function loadVolleyballMatches(dateStr) {
     const data = await res.json();
     console.log("Volleyball API response:", data);
 
-    // ограничим вывод первыми тремя лигами
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
       volleyballContainer.innerHTML = "<p>Нет матчей</p>";
@@ -378,7 +411,6 @@ async function loadVolleyballMatches(dateStr) {
 
     volleyballContainer.innerHTML = "";
 
-    // Проходим по первым трём лигам
     leagues.forEach(leagueBlock => {
       const league = leagueBlock.league;
       const matches = leagueBlock.matches;
@@ -388,27 +420,26 @@ async function loadVolleyballMatches(dateStr) {
       leagueEl.className = 'league';
       leagueEl.innerHTML = `
         <div class="league__header">
-          <img src="${league.logo}" alt="${league.name}">
+          <div class="league__logo"><img src="${league.logo}" alt="${league.name}"></div>
           <h2>${league.name}</h2>
         </div>
       `;
 
       matches.forEach(match => {
-        const displayTime = match.date ? new Date(match.date).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '';
+        // const displayTime = match.date ? new Date(match.date).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '';
 
         const matchEl = document.createElement('div');
         matchEl.className = 'match';
         matchEl.innerHTML = `
           <div class="team">
-            <img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}">
+            <div class="team__logo"><img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}"></div>
             ${match.teamInfo[0]?.name}
           </div>
-          <div class="status">${match.status}</div>
-          <div class="team">
-            <img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}">
+          <div class="time time--status">${match.status}</div>
+          <div class="team team--2">
             ${match.teamInfo[1]?.name}
+            <div class="team__logo"><img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}"></div>
           </div>
-          <div class="time">${displayTime}</div>
         `;
         leagueEl.appendChild(matchEl);
       });
@@ -422,8 +453,8 @@ async function loadVolleyballMatches(dateStr) {
   }
 }
 
-// Инициализация
-loadMatches();
+loadMatches(); // Инициализация
+
 // сразу загружаем турнирную таблицу в div#leagueTable
 loadStandings(39, 2023);
 
