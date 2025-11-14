@@ -22,7 +22,7 @@
     }
 
     &__logo {
-      width: 275px;
+      width: 315px;
       font-size: 18px;
       font-weight: 500;
     }
@@ -152,6 +152,10 @@
         justify-content: center;
         align-items: center;
         color: var(--main-100, #008AFF);
+
+        & + span {
+           color: var(--white-100, #FFFFFF);
+        }
 
       }
       .btn {

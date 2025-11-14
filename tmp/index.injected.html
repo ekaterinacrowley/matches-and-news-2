@@ -8,32 +8,35 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 </head>
 <body data-theme="light">
  <include src="header.html"></include> 
  <main class="main-width">
   <include src="sidebar.html"></include> 
   <div class="content">
+    <include src="top-slider.html"></include>
     <div class="container">
      <include src="sports.html"></include> 
      <include src="app-banner.html"></include> 
      </div>
+      <div class="container">
+        <include src="news.html"></include> 
+      </div>
+      <include src="telegram-banner.html"></include> 
   </div>
  </main>
 
 
 <!-- <div id="leagueTable"></div> -->
 
-<!-- Новости -->
-<!-- <h2>📰 Новости</h2>
-<div id="newsTopics" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"> -->
-  <!-- кнопки будут созданы скриптом; оставлено как контейнер для тем -->
-<!-- </div>
-<div id="newsContainer" style="max-width:900px;margin:0 auto;"></div> -->
+
 
 <!-- Подключаем вынесённый JS -->
+ <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="js/sports.js" defer></script>
-<!-- <script src="js/news.js" defer></script> -->
+<script src="js/news.js" defer></script>
 <script src="js/main.js" defer></script>
+
 </body>
 </html>

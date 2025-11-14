@@ -1,0 +1,17 @@
+.telegram-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    height: 239px;
+    background: url(images/telegram-bg.webp) center no-repeat;
+    padding: 40px;
+
+    &__title {
+        color: var(--white-100, #FFF);
+        font-size: 34px;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+} 

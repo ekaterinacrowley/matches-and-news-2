@@ -9,6 +9,16 @@ const currentDates = {
   cricket: new Date()
 };
 
+// Константы для кеширования
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+const CACHE_KEYS = {
+  FOOTBALL: 'football_matches',
+  CRICKET: 'cricket_matches', 
+  BASKETBALL: 'basketball_matches',
+  VOLLEYBALL: 'volleyball_matches',
+  STANDINGS: 'football_standings'
+};
+
 // Выносим formatDate наружу, чтобы она была доступна везде
 function formatDate(date) {
   const year = date.getFullYear();
@@ -17,7 +27,70 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
+// Функции для работы с кешем
+function getCachedData(key) {
+  try {
+    const cached = localStorage.getItem(key);
+    if (!cached) return null;
+    
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+    
+    // Проверяем, не устарели ли данные
+    if (now - timestamp > CACHE_DURATION) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error reading cache:', error);
+    return null;
+  }
+}
+
+function setCachedData(key, data) {
+  try {
+    const cacheItem = {
+      data,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(key, JSON.stringify(cacheItem));
+  } catch (error) {
+    console.error('Error saving cache:', error);
+  }
+}
+
+// Универсальная функция для запросов с кешированием
+async function fetchWithCache(url, cacheKey) {
+  // Пытаемся получить данные из кеша
+  const cachedData = getCachedData(cacheKey);
+  if (cachedData) {
+    // console.log(`Using cached data for ${cacheKey}`);
+    return cachedData;
+  }
+  
+  // Если данных в кеше нет или они устарели, делаем запрос
+  // console.log(`Fetching fresh data for ${cacheKey}`);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    // Сохраняем в кеш
+    setCachedData(cacheKey, data);
+    
+    return data;
+  } catch (error) {
+    console.error(`Error fetching ${cacheKey}:`, error);
+    throw error;
+  }
+}
+
 async function loadMatches() {
+  const today = formatDate(new Date());
   await Promise.all([
     loadFootballMatches(formatDate(currentDates.football)),
     loadCricketMatches(formatDate(currentDates.cricket)),
@@ -112,14 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
 // --- Футбол --- 
-
 async function loadFootballMatches(dateStr) {
   footballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const res = await fetch(`/matches/football?date=${dateStr}`);
-    const data = await res.json();
+    const data = await fetchWithCache(`/matches/football?date=${dateStr}`, `${CACHE_KEYS.FOOTBALL}_${dateStr}`);
+    
     if (!data.response || data.response.length === 0) {
       footballContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
       return;
@@ -140,7 +211,7 @@ function isAllowedFootball(event) {
 
   const hay = [leagueName, leagueCountry, leagueSlug, home, away].join(' ').toLowerCase();
   const ok = allowedFootballKeywords.some(k => hay.includes(k));
-  console.log(`[DEBUG] filterFootball -> league="${leagueName}" teams="${home} vs ${away}" matched=${ok}`);
+  // console.log(`[DEBUG] filterFootball -> league="${leagueName}" teams="${home} vs ${away}" matched=${ok}`);
   return ok;
 }
 
@@ -199,10 +270,11 @@ function renderFootball(matches) {
         }).replace(',', '')}</strong><span class="watch">Watch</span>`;
       }
 
-      const matchEl = document.createElement('div');
+      const matchEl = document.createElement('a');
       matchEl.className = 'match';
+      matchEl.href = '#';
       if (isLive) matchEl.classList.add('live');
-      matchEl.innerHTML = `<div class="team"><div class="team__logo"><img src="${event.teams.home.logo}" alt="${event.teams.home.name}"></div>${event.teams.home.name}</div><div class="time">${displayTime}</div><div class="team team--2">${event.teams.away.name}<div class="team__logo"><img src="${event.teams.away.logo}" alt="${event.teams.away.name}"></div></div>`;
+      matchEl.innerHTML = `<div class="team"><div class="team__logo"><img src="${event.teams.home.logo}" alt="${event.teams.home.name}"></div><span>${event.teams.home.name}</span></div><div class="time">${displayTime}</div><div class="team team--2"><span>${event.teams.away.name}</span><div class="team__logo"><img src="${event.teams.away.logo}" alt="${event.teams.away.name}"></div></div>`;
       leagueEl.appendChild(matchEl);
     });
     footballContainer.appendChild(leagueEl);
@@ -211,16 +283,14 @@ function renderFootball(matches) {
 
 // --- Крикет ---
 async function loadCricketMatches(dateStr) {
-  console.log("=== loadCricketMatches START ===");
-  console.log("Received date parameter:", dateStr);
-  console.log("cricketContainer:", cricketContainer);
+  // console.log("=== loadCricketMatches START ===");
+  // console.log("Received date parameter:", dateStr);
+  // console.log("cricketContainer:", cricketContainer);
   
   cricketContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    console.log("Making fetch request to:", `/matches/cricket?date=${dateStr}`);
-    const res = await fetch(`/matches/cricket?date=${dateStr}`);
-    const data = await res.json();
-    console.log("Cricket API response:", data);
+    const data = await fetchWithCache(`/matches/cricket?date=${dateStr}`, `${CACHE_KEYS.CRICKET}_${dateStr}`);
+    // console.log("Cricket API response:", data);
     
     if (!data.data || data.data.length === 0) {
       console.log("No matches found or empty array");
@@ -228,16 +298,17 @@ async function loadCricketMatches(dateStr) {
       return;
     }
     
-    console.log(`Found ${data.data.length} matches, proceeding to render`);
+    // console.log(`Found ${data.data.length} matches, proceeding to render`);
     renderCricket(data.data, dateStr);
   } catch (e) {
     console.error("Error loading matches:", e);
     cricketContainer.innerHTML = "<p>Ошибка загрузки</p>";
   }
-  console.log("=== loadCricketMatches END ===");
+  // console.log("=== loadCricketMatches END ===");
 }
+
 function sortAndGroupMatches(matches) {
-  console.log("sortAndGroupMatches called with:", matches);
+  // console.log("sortAndGroupMatches called with:", matches);
   
   // Преобразуем дату в формате ISO в строку вида "YYYY-MM-DD"
   matches.forEach(match => {
@@ -255,14 +326,14 @@ function sortAndGroupMatches(matches) {
     }
     // Преобразуем в строку "YYYY-MM-DD"
     match.dateOnly = matchDate.toISOString().split('T')[0];
-    console.log(`Match date: ${dateString} -> ${match.dateOnly}`);
+    // console.log(`Match date: ${dateString} -> ${match.dateOnly}`);
   });
 
   const validMatches = matches.filter(match => 
     match.dateOnly && match.dateOnly !== "unknown" && match.dateOnly !== "invalid"
   );
   
-  console.log("Valid matches:", validMatches.length, "out of", matches.length);
+  // console.log("Valid matches:", validMatches.length, "out of", matches.length);
 
   validMatches.sort((a, b) => a.dateOnly.localeCompare(b.dateOnly));
 
@@ -279,21 +350,22 @@ function sortAndGroupMatches(matches) {
 }
 
 function renderCricket(matches, selectedDate) {
-  console.log("renderCricket called with matches:", matches);
-  console.log(`Selected date: "${selectedDate}"`);
+  // console.log("renderCricket called with matches:", matches);
+  // console.log(`Selected date: "${selectedDate}"`);
   cricketContainer.innerHTML = "";
   
   try {
     const groupedMatches = sortAndGroupMatches(matches);
-    console.log("Available dates:", Object.keys(groupedMatches));
-    console.log("Looking for date:", selectedDate);
+    // console.log("Available dates:", Object.keys(groupedMatches));
+    // console.log("Looking for date:", selectedDate);
 
     if (groupedMatches[selectedDate] && groupedMatches[selectedDate].length > 0) {
-      console.log(`✓ Found ${groupedMatches[selectedDate].length} matches for ${selectedDate}`);
+      // console.log(`✓ Found ${groupedMatches[selectedDate].length} matches for ${selectedDate}`);
       
       groupedMatches[selectedDate].forEach(match => {
-        const matchEl = document.createElement('div');
+        const matchEl = document.createElement('a');
         matchEl.className = 'match match--cricket';
+        matchEl.href = '#';
         
         // Форматируем дату в формат "14 Nov 15:00"
         let displayDate = 'Дата не указана';
@@ -309,18 +381,18 @@ function renderCricket(matches, selectedDate) {
         }
         
         matchEl.innerHTML = `
-          <div class="team">
-            <img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}">
-            ${match.teamInfo[0]?.shortname || match.teamInfo[0]?.name}
+          <div class="match__cricket">
+            <div class="team">
+              <div class="team__logo"><img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}"></div>
+              <span>${match.teamInfo[0]?.shortname || match.teamInfo[0]?.name}</span>
+            </div>
+            <div class="time"><strong>${displayDate}</strong><span class="watch">Watch</span></div>
+            <div class="team team--2">
+              <span>${match.teamInfo[1]?.shortname || match.teamInfo[1]?.name}</span>
+              <div class="team__logo"><img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}"></div>
+            </div>
           </div>
-          <div class="info">
-            <div class="date">${displayDate}</div>
-            <div class="status">${match.status}</div>
-          </div>
-          <div class="team">
-            <img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}">
-            ${match.teamInfo[1]?.shortname || match.teamInfo[1]?.name}
-          </div>
+          <div class="match-status">${match.status}</div>
         `;
         
         cricketContainer.appendChild(matchEl);
@@ -340,8 +412,7 @@ function renderCricket(matches, selectedDate) {
 async function loadBasketballMatches(dateStr) {
   basketballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const res = await fetch(`/matches/basketball?date=${dateStr}`);
-    const data = await res.json();
+    const data = await fetchWithCache(`/matches/basketball?date=${dateStr}`, `${CACHE_KEYS.BASKETBALL}_${dateStr}`);
     console.log("Basketball API response:", data);
 
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
@@ -368,18 +439,17 @@ async function loadBasketballMatches(dateStr) {
       `;
 
       matches.forEach(match => {
-        // const displayTime = match.date ? new Date(match.date).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '';
-
-        const matchEl = document.createElement('div');
+        const matchEl = document.createElement('a');
         matchEl.className = 'match';
+        matchEl.href = '#';
         matchEl.innerHTML = `
           <div class="team">
             <div class="team__logo"><img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}"></div>
-            ${match.teamInfo[0]?.name}
+            <span>${match.teamInfo[0]?.name}</span>
           </div>
-          <div class="time time--status">${match.status}</div>
+          <div class="time">${match.status}<span class="watch">Watch</span></div>
           <div class="team team--2">
-            ${match.teamInfo[1]?.name}
+            <span>${match.teamInfo[1]?.name}</span>
             <div class="team__logo"><img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}"></div>
           </div>
         `;
@@ -399,9 +469,8 @@ async function loadBasketballMatches(dateStr) {
 async function loadVolleyballMatches(dateStr) {
   volleyballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const res = await fetch(`/matches/volleyball?date=${dateStr}`);
-    const data = await res.json();
-    console.log("Volleyball API response:", data);
+    const data = await fetchWithCache(`/matches/volleyball?date=${dateStr}`, `${CACHE_KEYS.VOLLEYBALL}_${dateStr}`);
+    // console.log("Volleyball API response:", data);
 
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
@@ -426,18 +495,17 @@ async function loadVolleyballMatches(dateStr) {
       `;
 
       matches.forEach(match => {
-        // const displayTime = match.date ? new Date(match.date).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '';
-
-        const matchEl = document.createElement('div');
+        const matchEl = document.createElement('a');
         matchEl.className = 'match';
+        matchEl.href = '#';
         matchEl.innerHTML = `
           <div class="team">
             <div class="team__logo"><img src="${match.teamInfo[0]?.img}" alt="${match.teamInfo[0]?.name}"></div>
-            ${match.teamInfo[0]?.name}
+            <span>${match.teamInfo[0]?.name}</span>
           </div>
-          <div class="time time--status">${match.status}</div>
+          <div class="time">${match.status}<span class="watch">Watch</span></div>
           <div class="team team--2">
-            ${match.teamInfo[1]?.name}
+           <span>${match.teamInfo[1]?.name}</span>
             <div class="team__logo"><img src="${match.teamInfo[1]?.img}" alt="${match.teamInfo[1]?.name}"></div>
           </div>
         `;
@@ -465,15 +533,12 @@ async function loadStandings(league = 39, season = 2023, containerId = 'leagueTa
    container.innerHTML = '<p>Загрузка таблицы...</p>';
 
    try {
-     const res = await fetch(`/standings/football?league=${encodeURIComponent(league)}&season=${encodeURIComponent(season)}`);
-     if (!res.ok) {
-       const text = await res.text();
-       console.error('Standings fetch error:', res.status, text);
-       container.innerHTML = '<p>Ошибка загрузки таблицы</p>';
-       return;
-     }
-     const data = await res.json();
-     console.log('Standings response:', data);
+     const data = await fetchWithCache(
+       `/standings/football?league=${encodeURIComponent(league)}&season=${encodeURIComponent(season)}`,
+       `${CACHE_KEYS.STANDINGS}_${league}_${season}`
+     );
+     
+    //  console.log('Standings response:', data);
 
      if (!data.standings || data.standings.length === 0) {
        container.innerHTML = '<p>Таблица пустая</p>';
@@ -556,3 +621,15 @@ async function loadStandings(league = 39, season = 2023, containerId = 'leagueTa
      container.innerHTML = '<p>Ошибка при получении таблицы</p>';
    }
 }
+
+// Функция для принудительного обновления кеша (можно вызвать из консоли)
+function clearCache() {
+  Object.values(CACHE_KEYS).forEach(key => {
+    localStorage.removeItem(key);
+  });
+  console.log('Cache cleared');
+  location.reload();
+}
+
+// Добавляем глобальную функцию для очистки кеша
+window.clearCache = clearCache;

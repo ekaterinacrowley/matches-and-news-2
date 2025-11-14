@@ -21,9 +21,15 @@
         font-size: 22px;
         font-weight: 500;
         opacity: 0.4;
+        cursor: pointer;
+        transition: all .3s ease;
 
         &--active {
             border-bottom: 1px solid var(--vulcan, #090A12);
+            opacity: 1;
+        }
+
+        &:hover {
             opacity: 1;
         }
     }
@@ -52,8 +58,10 @@
         gap: 8px;
         border-radius: 16px;
         border: 1px solid var(--vulcan-10, rgba(9, 10, 18, 0.10));
+        cursor: pointer;
+        transition: all .3s ease;
 
-        &.active {
+        &.active, &:hover  {
             border: 1px solid var(--main-100, #008AFF);
             color: var(--main-100);
         }
@@ -62,6 +70,15 @@
     .leagues  {
         display: flex;
         flex-direction: column;
+
+        &--cricket {
+             flex-wrap: wrap;
+             flex-direction: row;
+            row-gap: 12px;
+            column-gap: 24px;
+            padding: 20px 0;
+            border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
+        }
     }
   .league {
     display: flex;
@@ -70,6 +87,10 @@
     column-gap: 24px;
     padding: 20px 0;
     border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
+
+    &:nth-child(n + 4) {
+        display: none;
+    }
     
 
     &__header {
@@ -108,6 +129,16 @@
         border: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
         background: var(--white-100, #FFF);
         width: calc(50% - 12px);
+
+        &--cricket {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        &__cricket {
+            display: flex;
+            justify-content: center;
+        }
     }
 
     .team {
@@ -120,6 +151,7 @@
 
         &--2 {
             justify-content: flex-end;
+            text-align: right;
         }
 
         &__logo {
@@ -132,6 +164,13 @@
             height: 36px;
             border-radius: 12px;
             background: var(--vulcan-4, rgba(9, 10, 18, 0.05));
+        }
+
+        span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 80px;
         }
     }
 
@@ -179,5 +218,12 @@
 
             }
         }
+    }
+
+    .match-status {
+       color: var(--vulcan-40, rgba(9, 10, 18, 0.4));
+        text-align: center;
+        font-size: 12px;
+        font-weight: 500;
     }
 }

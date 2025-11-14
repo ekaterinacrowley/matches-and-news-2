@@ -30,6 +30,8 @@
         flex: 1 0 0;
         max-width: 50%;
         height: 100%;
+        position: relative;
+        z-index: 2;
     }
 
     &__image {
@@ -97,6 +99,15 @@
             gap: 10px;
             border-radius: 8px;
             background: var(--main-100, #008AFF);
+            transition: all .3s ease;
+        }
+
+        &:hover {
+            background: var(--main-100, #008AFF);
+
+            span {
+                background: var(--vulcan, #090A12);
+            }
         }
     }
 

@@ -112,6 +112,7 @@ h2 {
   flex-direction: column;
   gap: 40px;
   flex: 1;
+  padding: 40px 16px 0 40px;
 }
 
 .container {
@@ -122,8 +123,10 @@ h2 {
 
 @import 'header';
 @import 'sidebar';
+@import 'top-slider';
 @import 'sports';
 @import 'app-banner';
-@import 'main-block';
+@import 'news';
+@import 'telegram-banner';
 @import 'footer';
  
