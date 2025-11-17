@@ -1,8 +1,11 @@
 .slider {
-    width: 1180px;
+    width: 1160px;
     overflow: hidden;
     margin-left: -40px;
     margin-right: -40px;
+    padding-bottom: 25px;
+    position: relative;
+
 
     .slide {
         position: relative;
@@ -58,7 +61,7 @@
             padding: 40px 0;
             position: relative;
             z-index: 2;
-            color: var(--white-100, #FFF);
+            color: #FFF;
         }
 
         &__teams {
@@ -93,8 +96,8 @@
                     align-items: center;
                     gap: 8px;
                     border-radius: 16px;
-                    border: 1px solid var(--white-100, #FFF);
-                    background: var(--white-10, rgba(255, 255, 255, 0.10));
+                    border: 1px solid #FFF;
+                    background: rgba(255, 255, 255, 0.10);
                     backdrop-filter: blur(4.650000095367432px);
                 }
             }
@@ -141,14 +144,23 @@
             border-radius: 1440px;
 
             &--1 {
-                background: var(--white-100, #FFF);
+                background: #FFF;
                 color: var(--main-100, #008AFF);
             }
 
             &--2 {
-                border: 2px solid var(--white-100, #FFF);
+                border: 2px solid  #FFF;
             }
         }
+    }
+
+    .swiper-pagination {
+        bottom: 0 !important;
+    }
+    .swiper-pagination-bullet {
+        width: 19px;
+        height: 12px;
+        background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='19' height='12' viewBox='0 0 19 12' fill='none'><g opacity='0.4'><path d='M13.8086 7.02868L12.6359 5.05648L18.3264 0.00354004L13.0254 0.00354004L10.8617 2.06597L3.52248 8.74737L0 11.9914H5.01542L8.78457 8.65284L10.0525 10.8012C10.4852 11.3426 11.0954 12 13.6832 12H16.7123L13.813 7.02009H13.8086V7.02868Z' fill='%23090012'/><path d='M10.4557 1.40856V1.38278C9.7979 0.467577 8.71173 -0.0480293 7.58229 0.0035314L3.66602 0.0035314L6.58699 4.93617L10.4557 1.40856Z' fill='%23090012'/></g></svg>") center/contain no-repeat;
     }
 }
 
@@ -165,7 +177,7 @@
 }
 
 .swiper-slide {
-    width: 1100px !important;
+    width: 1082px !important;
     display: flex;
     
     .slide {

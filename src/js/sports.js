@@ -27,6 +27,24 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
+// Функция для получения фиксированных дат
+function getFixedDates() {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const dayBeforeYesterday = new Date(today);
+  dayBeforeYesterday.setDate(today.getDate() - 2);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  
+  return {
+    today: formatDate(today),
+    yesterday: formatDate(yesterday),
+    dayBeforeYesterday: formatDate(dayBeforeYesterday),
+    tomorrow: formatDate(tomorrow)
+  };
+}
+
 // Функции для работы с кешем
 function getCachedData(key) {
   try {
@@ -90,12 +108,12 @@ async function fetchWithCache(url, cacheKey) {
 }
 
 async function loadMatches() {
-  const today = formatDate(new Date());
+  const fixedDates = getFixedDates();
   await Promise.all([
-    loadFootballMatches(formatDate(currentDates.football)),
-    loadCricketMatches(formatDate(currentDates.cricket)),
-    loadBasketballMatches(formatDate(currentDates.football)),
-    loadVolleyballMatches(formatDate(currentDates.football))
+    loadFootballMatches(currentDates.football),
+    loadCricketMatches(currentDates.cricket),
+    loadBasketballMatches(currentDates.football),
+    loadVolleyballMatches(currentDates.football)
   ]);
 }
 
@@ -120,8 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
         footballPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         prevBtn.classList.add('active');
         
-        currentDates.football.setDate(currentDates.football.getDate() - 1);
-        loadFootballMatches(formatDate(currentDates.football));
+        const fixedDates = getFixedDates();
+        currentDates.football = fixedDates.yesterday;
+        loadFootballMatches(fixedDates.yesterday);
       });
     }
 
@@ -130,8 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
         footballPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         todayBtn.classList.add('active');
         
-        currentDates.football = new Date();
-        loadFootballMatches(formatDate(currentDates.football));
+        const fixedDates = getFixedDates();
+        currentDates.football = fixedDates.today;
+        loadFootballMatches(fixedDates.today);
       });
     }
 
@@ -140,8 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
         footballPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         nextBtn.classList.add('active');
         
-        currentDates.football.setDate(currentDates.football.getDate() + 1);
-        loadFootballMatches(formatDate(currentDates.football));
+        const fixedDates = getFixedDates();
+        currentDates.football = fixedDates.tomorrow;
+        loadFootballMatches(fixedDates.tomorrow);
       });
     }
   }
@@ -158,8 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cricketPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         prevPrevBtn.classList.add('active');
         
-        currentDates.cricket.setDate(currentDates.cricket.getDate() - 2);
-        loadCricketMatches(formatDate(currentDates.cricket));
+        const fixedDates = getFixedDates();
+        currentDates.cricket = fixedDates.dayBeforeYesterday;
+        loadCricketMatches(fixedDates.dayBeforeYesterday);
       });
     }
 
@@ -168,8 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cricketPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         prevBtn.classList.add('active');
         
-        currentDates.cricket.setDate(currentDates.cricket.getDate() - 1);
-        loadCricketMatches(formatDate(currentDates.cricket));
+        const fixedDates = getFixedDates();
+        currentDates.cricket = fixedDates.yesterday;
+        loadCricketMatches(fixedDates.yesterday);
       });
     }
 
@@ -178,8 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cricketPicker.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
         todayBtn.classList.add('active');
         
-        currentDates.cricket = new Date();
-        loadCricketMatches(formatDate(currentDates.cricket));
+        const fixedDates = getFixedDates();
+        currentDates.cricket = fixedDates.today;
+        loadCricketMatches(fixedDates.today);
       });
     }
   }
@@ -187,12 +211,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Футбол --- 
 async function loadFootballMatches(dateStr) {
+  // Если передана дата как строка, используем её, если объект Date - форматируем
+  const dateToLoad = typeof dateStr === 'string' ? dateStr : formatDate(dateStr);
+  
   footballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const data = await fetchWithCache(`/matches/football?date=${dateStr}`, `${CACHE_KEYS.FOOTBALL}_${dateStr}`);
+    const data = await fetchWithCache(`/matches/football?date=${dateToLoad}`, `${CACHE_KEYS.FOOTBALL}_${dateToLoad}`);
     
     if (!data.response || data.response.length === 0) {
-      footballContainer.innerHTML = `<p>Нет матчей на ${dateStr}</p>`;
+      footballContainer.innerHTML = `<p>Нет матчей на ${dateToLoad}</p>`;
       return;
     }
     renderFootball(data.response);
@@ -201,6 +228,8 @@ async function loadFootballMatches(dateStr) {
     console.error(e);
   }
 }
+
+// ... остальные функции (isAllowedFootball, renderFootball, loadCricketMatches и т.д.) остаются без изменений
 
 function isAllowedFootball(event) {
   const leagueName = (event.league?.name || '');
@@ -400,7 +429,7 @@ function renderCricket(matches, selectedDate) {
     } else {
       console.log(`✗ No matches found for selected date: "${selectedDate}"`);
       console.log("Available dates are:", Object.keys(groupedMatches));
-      cricketContainer.innerHTML = `<p>Нет матчей на ${selectedDate}</p>`;
+      cricketContainer.innerHTML = `<p>Нет матчей.</p>`;
     }
   } catch (error) {
     console.error("Error in renderCricket:", error);
@@ -538,38 +567,55 @@ async function loadStandings(league = 39, season = 2023, containerId = 'leagueTa
        `${CACHE_KEYS.STANDINGS}_${league}_${season}`
      );
      
-    //  console.log('Standings response:', data);
+    console.log('Standings response:', data);
 
      if (!data.standings || data.standings.length === 0) {
        container.innerHTML = '<p>Таблица пустая</p>';
        return;
      }
 
-     // Создаём расширенную таблицу со всеми полями
-     const table = document.createElement('table');
-     table.style.width = '100%';
-     table.style.borderCollapse = 'collapse';
-     table.style.marginTop = '8px';
+     // Создаём таблицу
+     const table = document.createElement('div');
+     table.className = 'tab__content';
 
-     const thead = document.createElement('thead');
+     const thead = document.createElement('div');
+     thead.className = 'tab__head';
      thead.innerHTML = `
-       <tr>
-         <th style="text-align:left;padding:6px;border-bottom:1px solid #333">#</th>
-         <th style="text-align:left;padding:6px;border-bottom:1px solid #333">Команда</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">И</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">В</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">Н</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">П</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">ГЗ</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">ГП</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">±</th>
-         <th style="text-align:right;padding:6px;border-bottom:1px solid #333">О</th>
-         <th style="text-align:center;padding:6px;border-bottom:1px solid #333">Форма</th>
-       </tr>
+         <div class="tab__club">
+            <div>#</div>
+            <div>Club</div>
+         </div>
+          <div class="tab__digits">
+            <div>W</div>
+            <div>D</div>
+            <div>L</div>
+            <div>Poin</div>
+         </div>
+         <div>Last Match</div>
      `;
      table.appendChild(thead);
 
-     const tbody = document.createElement('tbody');
+     const tbody = document.createElement('div');
+     tbody.className = 'tab__body';
+
+     // Создаём контейнер для логотипов в отдельном месте
+     const logosContainer = document.getElementById('teamsLogos');
+     if (logosContainer) {
+
+       // Заполняем логотипы
+       data.standings.forEach(row => {
+         if (row.logo && row.team) {
+           const logoElement = document.createElement('div');
+           logoElement.className = 'teams__item';
+           logoElement.innerHTML = `
+             <img src="${row.logo}" 
+                  alt="${row.team}" 
+                  title="${row.team}"> 
+           `;
+           logosContainer.appendChild(logoElement);
+         }
+       });
+     }
 
      data.standings.forEach(row => {
        // Попытка достать подробную статистику (api возвращает в поле all)
@@ -586,25 +632,45 @@ async function loadStandings(league = 39, season = 2023, containerId = 'leagueTa
        const points = row.points ?? row.pts ?? '';
        const form = row.form ?? '';
 
-       const tr = document.createElement('tr');
+       // Преобразуем форму в цветные span'ы
+       let formHTML = '';
+       if (form) {
+         formHTML = form.split('').map(char => {
+           let className = '';
+           switch(char) {
+             case 'W':
+               className = 'win';
+               break;
+             case 'D':
+               className = 'draw';
+               break;
+             case 'L': 
+               className = 'lose';
+               break;
+             default:
+               className = '';
+           }
+           return `<span class="form-badge ${className}">${char}</span>`;
+         }).join('');
+       }
+
+       const tr = document.createElement('div');
+       tr.className = "tab__row";
        tr.innerHTML = `
-         <td style="padding:6px;border-bottom:1px solid #222">${row.rank ?? ''}</td>
-         <td style="padding:6px;border-bottom:1px solid #222;display:flex;align-items:center;gap:8px">
-           ${row.logo ? `<img src="${row.logo}" alt="${row.team}" style="width:22px;height:22px;object-fit:contain">` : ''}
-           <div>
-             <div style="font-weight:600">${row.team ?? ''}</div>
-             ${row.teamId ? `<div style="font-size:12px;color:#999">ID: ${row.teamId}</div>` : ''}
-           </div>
-         </td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${played}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${win}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${draw}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${lose}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${goalsFor}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${goalsAgainst}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${gd}</td>
-         <td style="text-align:right;padding:6px;border-bottom:1px solid #222">${points}</td>
-         <td style="text-align:center;padding:6px;border-bottom:1px solid #222">${form}</td>
+         <div class="tab__club">
+         <div>${row.rank ?? ''}</div>
+         <div class="tab__team">
+           ${row.logo ? `<img src="${row.logo}" alt="${row.team}" style="width:32px;height:32px;object-fit:contain">` : ''}
+             <div class="tab__team-name">${row.team ?? ''}</div>
+         </div> 
+         </div>
+         <div class="tab__digits">
+            <div>${win}</div>
+            <div>${draw}</div>
+            <div>${lose}</div>
+            <div>${points}</div>
+         </div>
+         <div class="tab__form">${formHTML}</div>
        `;
        tbody.appendChild(tr);
      });
@@ -612,10 +678,22 @@ async function loadStandings(league = 39, season = 2023, containerId = 'leagueTa
      table.appendChild(tbody);
 
      container.innerHTML = '';
-     const header = document.createElement('h3');
-     header.textContent = data.league?.name ? `${data.league.name} — ${data.season}` : `Таблица — ${data.season}`;
+     const header = document.createElement('div');
+     header.className = 'tab__header';
+     
+     if (data.league?.name && data.league?.logo) {
+       header.innerHTML = `
+         <img src="${data.league.logo}" alt="${data.league.name}" style="width:32px;height:32px;object-fit:contain">
+         <div class="tab__league">${data.league.name} — ${data.season}</div>
+         <a href="" class="tab__link">View All</a>
+       `;
+     } else {
+       header.textContent = `Таблица — ${data.season}`;
+     }
+     
      container.appendChild(header);
      container.appendChild(table);
+
    } catch (err) {
      console.error('Error loading standings:', err);
      container.innerHTML = '<p>Ошибка при получении таблицы</p>';
@@ -633,3 +711,164 @@ function clearCache() {
 
 // Добавляем глобальную функцию для очистки кеша
 window.clearCache = clearCache;
+
+
+// // Функция для тестирования доступных endpoints
+// async function testEndpoints() {
+//   // Сначала проверим текущие запросы которые работают
+//   console.log('=== Проверка работающих endpoints ===');
+  
+//   const workingEndpoints = [
+//     '/matches/football?date=2024-01-15',
+//     '/matches/cricket?date=2024-01-15',
+//     '/matches/basketball?date=2024-01-15', 
+//     '/matches/volleyball?date=2024-01-15',
+//     '/standings/football?league=39&season=2025'
+//   ];
+  
+//   for (const endpoint of workingEndpoints) {
+//     try {
+//       const response = await fetch(endpoint);
+//       console.log(`${endpoint}: ${response.status} ${response.statusText}`);
+      
+//       if (response.ok) {
+//         const data = await response.json();
+//         console.log(`  ✅ Успех! Структура ответа:`, Object.keys(data));
+        
+//         // Для matches выведем количество матчей
+//         if (endpoint.includes('/matches/')) {
+//           const sport = endpoint.split('/')[2];
+//           if (data.response) {
+//             console.log(`  📊 Матчей ${sport}: ${data.response.length}`);
+//           } else if (data.data) {
+//             console.log(`  📊 Матчей ${sport}: ${data.data.length}`);
+//           }
+//         }
+        
+//         // Для standings выведем информацию о лиге
+//         if (endpoint.includes('/standings/')) {
+//           console.log(`  🏆 Лига: ${data.league?.name || 'Не указана'}`);
+//           console.log(`  👥 Команд: ${data.standings?.length || 0}`);
+//         }
+//       } else {
+//         console.log(`  ❌ Ошибка: ${response.status}`);
+//       }
+//     } catch (error) {
+//       console.log(`${endpoint}: ❌ Ошибка -`, error.message);
+//     }
+//     console.log('---');
+//   }
+// }
+
+// window.testEndpoints = testEndpoints;
+
+// // Функция для анализа структуры данных standings
+// async function analyzeStandingsData() {
+//   try {
+//     console.log('=== Анализ структуры данных standings ===');
+    
+//     const response = await fetch('/standings/football?league=39&season=2025');
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+    
+//     const data = await response.json();
+//     console.log('Полная структура данных:');
+//     console.dir(data, { depth: 3 });
+    
+//     // Проанализируем структуру
+//     if (data.league) {
+//       console.log('\n=== Информация о лиге ===');
+//       console.log('ID:', data.league.id);
+//       console.log('Название:', data.league.name);
+//       console.log('Страна:', data.league.country);
+//       console.log('Лого:', data.league.logo);
+//       console.log('Сезон:', data.season);
+//     }
+    
+//     if (data.standings && data.standings.length > 0) {
+//       console.log('\n=== Информация о командах ===');
+//       const firstTeam = data.standings[0];
+//       console.log('Структура данных команды:');
+//       console.dir(firstTeam, { depth: 3 });
+      
+//       console.log('\nДоступные поля:');
+//       console.log('- rank:', firstTeam.rank);
+//       console.log('- team:', firstTeam.team);
+//       console.log('- points:', firstTeam.points);
+//       console.log('- goalsFor:', firstTeam.goals?.for);
+//       console.log('- goalsAgainst:', firstTeam.goals?.against);
+//       console.log('- form:', firstTeam.form);
+//       console.log('- all:', firstTeam.all);
+//     }
+    
+//     return data;
+    
+//   } catch (error) {
+//     console.error('Ошибка при анализе данных:', error);
+//     return null;
+//   }
+// }
+
+// window.analyzeStandingsData = analyzeStandingsData;
+
+// // Функция для поиска ID лиг через анализ standings
+// async function findLeagueIds() {
+//   console.log('=== Поиск ID лиг через тестовые запросы ===');
+  
+//   // Список популярных лиг для тестирования
+//   const testLeagues = [
+//     {id: 39, name: 'Premier League'},
+//     {id: 140, name: 'La Liga'},
+//     {id: 78, name: 'Bundesliga'},
+//     {id: 135, name: 'Serie A'},
+//     {id: 61, name: 'Ligue 1'},
+//     {id: 2, name: 'Champions League'},
+//     {id: 3, name: 'Europa League'},
+//     {id: 848, name: 'Saudi Pro League'},
+//     {id: 1, name: 'World Cup'},
+//     {id: 45, name: 'FA Cup'}
+//   ];
+  
+//   const availableLeagues = [];
+  
+//   for (const league of testLeagues) {
+//     try {
+//       const response = await fetch(`/standings/football?league=${league.id}&season=2023`);
+//       if (response.ok) {
+//         const data = await response.json();
+//         if (data.league && data.standings) {
+//           availableLeagues.push({
+//             id: data.league.id,
+//             name: data.league.name,
+//             country: data.league.country,
+//             season: data.season,
+//             teams: data.standings.length
+//           });
+//           console.log(`✅ ${league.name} (ID: ${league.id}) - ${data.standings.length} команд`);
+//         }
+//       } else {
+//         console.log(`❌ ${league.name} (ID: ${league.id}) - ${response.status}`);
+//       }
+//     } catch (error) {
+//       console.log(`❌ ${league.name} (ID: ${league.id}) - ошибка`);
+//     }
+//   }
+  
+//   if (availableLeagues.length > 0) {
+//     console.log('\n=== Найденные лиги ===');
+//     console.table(availableLeagues);
+//   } else {
+//     console.log('Не найдено доступных лиг');
+//   }
+  
+//   return availableLeagues;
+// }
+
+// window.findLeagueIds = findLeagueIds;
+
+// console.log('Функции для анализа endpoints загружены!');
+// console.log('Используйте в консоли:');
+// console.log('- testEndpoints() - проверить работающие endpoints');
+// console.log('- analyzeStandingsData() - проанализировать структуру данных');
+// console.log('- findLeagueIds() - найти ID доступных лиг');

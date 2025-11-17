@@ -13,6 +13,14 @@
     --white-100: rgba(255, 255, 255, 1); /* #FFFFFF, 100% */
     --white-5: rgba(255, 255, 255, 0.05); /* #FFFFFF, 5% */
     --white-60: rgba(255, 255, 255, 0.6); /* #FFFFFF, 60% */
+
+    .telegram-banner {
+        background: url(images/telegram-bg.webp) center no-repeat;
+    }
+
+    .sidebar__app {
+        background: url(images/sidebar-app.webp) center no-repeat;
+    }
 }
 
 [data-theme="dark"] {
@@ -30,4 +38,21 @@
     --white-100: rgba(9, 23, 39, 1); /* #091727, 100% */
     --white-5: rgba(9, 23, 39, 0.05); /* #091727, 5% */
     --white-60: rgba(9, 23, 39, 0.6); /* #091727, 60% */
+
+    .telegram-banner {
+        background: url(images/telegram-bg-dark.webp) center no-repeat;
+    }
+
+    .tab__header img {
+        background: #fff;
+        border-radius: 50%;
+    }
+
+    .tab__league:after, .tab__link:after {
+        filter: brightness(100);
+    } 
+
+    .sidebar__app {
+        background: url(images/sidebar-app-dark.webp) center no-repeat;
+    }
 }

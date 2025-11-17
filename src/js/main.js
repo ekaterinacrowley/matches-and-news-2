@@ -55,6 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
         enableDragScroll(topicsContainer);
     }
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const teamsContainer = document.getElementById('teamsTopics');
+    if (teamsContainer) {
+        enableDragScroll(teamsContainer);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+   const teamsLogosContainer = document.getElementById('teamsLogos');
+        if (teamsLogosContainer) {
+            enableDragScroll(teamsLogosContainer);
+        }
+});
 
 document.querySelectorAll('.slide__content').forEach(slide => {
     const dateElement = slide.querySelector('.slide__match-date');
@@ -91,8 +104,62 @@ document.querySelectorAll('.slide__content').forEach(slide => {
         slidesPerView: 'auto',  
         slidesToScroll: 1, 
         spaceBetween: 0,  
-        navigation: { 
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: true,
         },
     });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const themeSwitcher = document.querySelector('.header__themes-switcher');
+    const darkIcon = document.querySelector('.header__theme-icon--dark');
+    const lightIcon = document.querySelector('.header__theme-icon--light');
+    const body = document.body;
+
+    // Функция для получения текущей темы из localStorage
+    function getSavedTheme() {
+        return localStorage.getItem('theme') || 'light';
+    }
+
+    // Функция для сохранения темы в localStorage
+    function saveTheme(theme) {
+        localStorage.setItem('theme', theme);
+    }
+
+    // Функция для применения темы
+    function applyTheme(theme) {
+        body.setAttribute('data-theme', theme);
+        
+        // Обновляем видимость иконок
+        if (theme === 'dark') {
+            darkIcon.classList.add('header__theme-icon--active');
+            lightIcon.classList.remove('header__theme-icon--active');
+        } else {
+            lightIcon.classList.add('header__theme-icon--active');
+            darkIcon.classList.remove('header__theme-icon--active');
+        }
+    }
+
+    // Функция для переключения темы
+    function toggleTheme() {
+        const currentTheme = body.getAttribute('data-theme') || getSavedTheme();
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        applyTheme(newTheme);
+        saveTheme(newTheme);
+    }
+
+    // Инициализация темы при загрузке страницы
+    function initTheme() {
+        const savedTheme = getSavedTheme();
+        applyTheme(savedTheme);
+    }
+
+    // Добавляем обработчик клика на переключатель
+    themeSwitcher.addEventListener('click', toggleTheme);
+
+    // Инициализируем тему
+    initTheme();
+});

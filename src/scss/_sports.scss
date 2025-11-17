@@ -23,6 +23,7 @@
         opacity: 0.4;
         cursor: pointer;
         transition: all .3s ease;
+        
 
         &--active {
             border-bottom: 1px solid var(--vulcan, #090A12);
@@ -60,6 +61,7 @@
         border: 1px solid var(--vulcan-10, rgba(9, 10, 18, 0.10));
         cursor: pointer;
         transition: all .3s ease;
+        color: var(--vulcan);
 
         &.active, &:hover  {
             border: 1px solid var(--main-100, #008AFF);

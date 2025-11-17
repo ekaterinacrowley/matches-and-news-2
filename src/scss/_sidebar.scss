@@ -10,6 +10,7 @@
     align-items: flex-start;
     gap: 16px;
     align-self: stretch;  
+    height: fit-content;
 
     &__nav {
         display: flex;
@@ -32,6 +33,10 @@
                 align-items: center;
                 gap: 16px;
                 color: var(--vulcan-40);
+                
+                svg {
+                     fill: var(--vulcan-40, rgba(255, 255, 255, 0.40));
+                }
                 
                 &:hover {
                     color: var(--main-100, #008AFF);
@@ -60,11 +65,16 @@
 
             &--current a {
                 color: var(--main-100, #008AFF); 
+
+                svg {
+                      fill: var(--main-100, #008AFF);
+                }
             }
 
             &--see-more a {
                 color: var(--main-100); 
             }  
+
         }
 
     &__tab-buttons {
@@ -89,5 +99,11 @@
             color: var(--vulcan, #090A12);
             border-bottom: 1px solid var(--vulcan);
         }
+    }
+
+    &__app {
+            margin-left: -15px;
+            width: 259px;
+            height: 165px;
     }
 }

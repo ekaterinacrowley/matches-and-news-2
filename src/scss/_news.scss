@@ -19,6 +19,7 @@
     align-items: center;
     padding: 20px 0;
     gap: 10px;
+    max-width: 750px;
     overflow-x: auto;
     
     /* Обязательные свойства для работы скролла */
@@ -52,6 +53,7 @@
         border: 1px solid var(--vulcan-10, rgba(9, 10, 18, 0.1));
         cursor: pointer;
         transition: all .3s ease;
+         color: var(--vulcan);
 
         &--selected, &:hover {
             border: 1px solid var(--main-100, #008AFF);
@@ -61,11 +63,12 @@
 
     &__list {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;;
         align-items: stretch;
         flex-wrap: wrap;
         gap: 12px;
         align-self: stretch;
+        
     }
 
     &__item {
@@ -179,6 +182,8 @@
         width: 160px;
         margin: 12px auto;
 
+        
+
         span {
             display: flex;
             padding: 8px;
@@ -187,6 +192,12 @@
             border-radius: 8px;
             background: var(--main-100, #008AFF);
             transition: all .3s ease;
+
+                svg {
+                    fill: var(--white-100);
+    
+                }
+
             }
 
         &:hover {
