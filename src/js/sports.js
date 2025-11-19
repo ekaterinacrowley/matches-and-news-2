@@ -442,14 +442,17 @@ function renderCricket(matches, selectedDate) {
 
 // --- Баскетбол ---
 async function loadBasketballMatches(dateStr) {
-  basketballContainer.innerHTML = "<p>...</p>";
+  // Если передана дата как строка, используем её, если объект Date - форматируем
+  const dateToLoad = typeof dateStr === 'string' ? dateStr : formatDate(dateStr);
+  
+  basketballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const data = await fetchWithCache(`/matches/basketball?date=${dateStr}`, `${CACHE_KEYS.BASKETBALL}_${dateStr}`);
+    const data = await fetchWithCache(`/matches/basketball?date=${dateToLoad}`, `${CACHE_KEYS.BASKETBALL}_${dateToLoad}`);
     console.log("Basketball API response:", data);
 
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
-      basketballContainer.innerHTML = "<p>No matches</p>";
+      basketballContainer.innerHTML = "<p>Нет матчей</p>";
       return;
     }
 
@@ -493,20 +496,22 @@ async function loadBasketballMatches(dateStr) {
 
   } catch (e) {
     console.error("Basketball fetch error:", e);
-    basketballContainer.innerHTML = "<p>Error</p>";
+    basketballContainer.innerHTML = "<p>Ошибка загрузки</p>";
   }
 }
-
 // --- Волейбол ---
 async function loadVolleyballMatches(dateStr) {
-  volleyballContainer.innerHTML = "<p>...</p>";
+  // Если передана дата как строка, используем её, если объект Date - форматируем
+  const dateToLoad = typeof dateStr === 'string' ? dateStr : formatDate(dateStr);
+  
+  volleyballContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const data = await fetchWithCache(`/matches/volleyball?date=${dateStr}`, `${CACHE_KEYS.VOLLEYBALL}_${dateStr}`);
-    console.log("Volleyball API response:", data);
+    const data = await fetchWithCache(`/matches/volleyball?date=${dateToLoad}`, `${CACHE_KEYS.VOLLEYBALL}_${dateToLoad}`);
+    // console.log("Volleyball API response:", data);
 
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
-      volleyballContainer.innerHTML = "<p>No matches</p>";
+      volleyballContainer.innerHTML = "<p>Нет матчей</p>";
       return;
     }
 
@@ -549,7 +554,7 @@ async function loadVolleyballMatches(dateStr) {
 
   } catch (e) {
     console.error("Volleyball fetch error:", e);
-    volleyballContainer.innerHTML = "<p>Error</p>";
+    volleyballContainer.innerHTML = "<p>Ошибка загрузки</p>";
   }
 }
 

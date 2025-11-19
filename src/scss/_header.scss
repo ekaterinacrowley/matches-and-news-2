@@ -112,6 +112,8 @@
 
       svg {
           fill: var(--vulcan-40, rgba(255, 255, 255, 0.40));
+           width: 24px;
+          height: 24px;
         }
 
       &--active {
@@ -145,6 +147,8 @@
 
       svg {
           fill: var(--vulcan-40, rgba(255, 255, 255, 0.40));
+          width: 24px;
+          height: 24px;
         }
 
     }
@@ -170,11 +174,7 @@
       .btn {
         padding: 6px 12px;
         font-size: 14px;
-      }
-
-      @media (max-width: 767px) {
-        display: none;
-      }
+      } 
     }
 
   }

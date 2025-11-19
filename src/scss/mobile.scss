@@ -1,0 +1,288 @@
+@media (max-width: 767px) {
+
+    .main-width {
+        padding: 0 8px;;
+    }
+
+    header .header {
+        height: 52px;
+
+        &__logo {
+            width: auto;
+        }
+
+        &__search {
+            width: 36px;
+           
+            input {
+                display: none;
+            }
+        }
+
+    
+
+        &__langs {
+            display: none;
+        } 
+
+        &__themes-switcher {
+             display: none;
+        }
+
+        &__app {
+            span:first-child {
+                display: none;
+            }
+        }
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        padding: 8px 0;
+    }
+
+
+    .slider {
+        height: 670px;
+
+        &__wrapper {
+            width: 100%;
+            left: 0;
+        }
+
+        .swiper-container {
+            padding: 0;
+        }
+        .swiper-slide {
+            width: 100% !important;
+        }
+
+        .slide {
+            padding-top: 230px;
+
+             &:before {
+                background-position: top center;
+                margin: auto;
+                width: 90%;
+                height: 90%;
+                top: 20px;
+             }
+
+             &:after {
+                height: 600px;
+                background: linear-gradient(0deg, #008AFF 41.66%, rgba(0, 138, 255, 0.00) 75.75%);
+             }
+                
+
+
+            &__player {
+               width: 240px;
+                height: auto;
+                top: 50px;
+                bottom: auto;
+
+                &--1 {
+                    z-index: 1;
+                    width: 240px;
+                }
+
+                &--2 {
+                    width: 223px;
+                }
+            }
+
+            &__content {
+                gap: 13px;
+            }
+
+            &__match-title {
+                display: none;
+            }
+
+            &__match-date {
+                display: none;
+            }
+
+            &__mobile {
+                display: flex;
+            }
+
+            &__match-scores {
+                flex-direction: column;
+            }
+
+            &__timer div div {
+                font-size: 20px;
+                height: 24px;
+            }
+
+            &__controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            &__btn {
+                width: 100%;
+            }
+        }
+    }
+
+
+    .sports {
+        padding: 12px 0;
+
+        &__tab {
+            padding: 0 16px 16px;
+
+            &:nth-child(n + 4) {
+                display: none;
+            }
+        }
+
+        .league {
+
+        }
+
+        .match {
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            height: 112px;
+            gap: 8px; 
+
+            &--cricket {
+                flex-wrap: nowrap;
+                height: auto;
+
+                .match-status {
+                    margin: 8px auto;
+                }
+            }
+
+            .team {
+                order: 0;
+
+                &--2 {
+                    order: 1;
+                    text-align: left;
+                    justify-content: flex-start;
+                }
+
+                span {
+                        order: 2;
+                }
+            }
+
+            .time {
+                order: 2;
+                flex-direction: column;
+                height: 100%;
+                padding: 12px 4px 4px 4px;
+                justify-content: space-between;
+                width: 42%;
+                margin-left: auto;
+
+                strong {
+                    margin: auto;
+                }
+
+                .watch, .hightlights  {
+                    padding: 8px 12px 8px 4px;
+                    width: 100%;
+                    border-radius: 12px;
+                }
+            }
+
+            &__cricket {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                height: 112px;
+                gap: 8px; 
+
+            }
+           
+        }
+    }
+
+    .app-banner {
+        flex-direction: column;
+        height: auto;
+
+        &__content {
+            padding: 20px;
+            max-width: 100%;
+        }
+
+        &__text {
+            br {
+                display: none;
+            }
+        }
+
+        &__controls {
+            width: 100%;
+
+        }
+
+        &__btn {
+            flex: 1;
+
+            div {
+                margin: auto;
+            }
+        }
+
+        &__image {
+            position: relative;
+            width: auto;
+            height: auto;
+            max-width: 104%;
+            margin-left: -8px;
+            margin-right: -8px;
+        }
+
+        &:after {
+            background: url(images/app-bg-mob.webp) right bottom no-repeat;
+        }
+    }
+
+    .news {
+        padding: 0;
+
+        &__heading {
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 8px;
+            gap: 0;
+        }
+
+        &__topics {
+            padding: 16px 0 0;
+             max-width: 95vw;
+        }
+
+        &__list {
+            gap: 8px;
+        }
+
+        &__item {
+            min-width: calc(50% - 8px);
+            max-width:  calc(50% - 8px);
+        }
+
+        &__content {
+            padding: 4px 12px 12px 12px;
+        }
+
+    }
+
+    .bottom-panel {
+        display: block;
+    }
+}

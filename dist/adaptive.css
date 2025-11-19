@@ -1,4 +1,4 @@
-@media (max-width: 1440px) and (min-width: 677px) {
+@media (max-width: 1440px) and (min-width: 767px) {
 
     body {
         font-size: 1vw;
@@ -46,11 +46,28 @@ header .header__search input {
 header .header__controls {
   gap: 2.222vw;
 }
+
+.header .header__lang {
+ width: 2.083vw;
+    height:  2.083vw;
+}
+
+header .header__theme-icon svg {
+    width: 1.666vw;
+    height: 1.666vw;
+}
+
 header .header__notifications span {
   width: 1.389vw;
   min-width: 1.389vw;
   height: 1.389vw;
 }
+
+header .header__notifications svg {
+    width: 1.666vw;
+    height: 1.666vw;
+}
+
 header .header__app span {
   padding: 0.556vw 0.833vw;
 }
@@ -77,6 +94,12 @@ header .header__app .btn {
   width: 1.667vw;
   height: 1.667vw;
 }
+
+.sidebar__nav-item a  svg {
+    width: 1.666vw;
+    height: 1.666vw;
+}
+
 .sidebar__tab-buttons {
   margin-bottom: 1.944vw;
 }

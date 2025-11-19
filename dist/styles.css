@@ -157,9 +157,6 @@ p {
   color: var(--white-100);
   font-weight: 500;
 }
-.btn:hover {
-  background: #EB172D;
-}
 
 h2 {
   margin: 0;
@@ -278,6 +275,8 @@ header .header__theme-icon {
 }
 header .header__theme-icon svg {
   fill: var(--vulcan-40, rgba(255, 255, 255, 0.4));
+  width: 24px;
+  height: 24px;
 }
 header .header__theme-icon--active {
   border: 1px solid var(--main-100, #008AFF);
@@ -306,6 +305,8 @@ header .header__notifications span {
 }
 header .header__notifications svg {
   fill: var(--vulcan-40, rgba(255, 255, 255, 0.4));
+  width: 24px;
+  height: 24px;
 }
 header .header__app {
   display: flex;
@@ -326,11 +327,6 @@ header .header__app span + span {
 header .header__app .btn {
   padding: 6px 12px;
   font-size: 14px;
-}
-@media (max-width: 767px) {
-  header .header__app {
-    display: none;
-  }
 }
 
 .sidebar {
@@ -462,6 +458,7 @@ header .header__app .btn {
   height: 100%;
   background: url(images/slider-bg.webp) center no-repeat;
   z-index: 0;
+  background-size: contain;
 }
 .slider .slide:after {
   content: "";
@@ -574,6 +571,17 @@ header .header__app .btn {
 }
 .slider .slide__btn--2 {
   border: 2px solid #FFF;
+}
+.slider .slide__mobile {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 20px;
+}
+.slider .slide__mobile span {
+  opacity: 0.6;
+  font-size: 14px;
 }
 .slider .swiper-pagination {
   bottom: 0 !important;
@@ -1423,7 +1431,15 @@ header .header__app .btn {
   bottom: 0;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(40px);
+  z-index: -1;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.app-popup.open {
   z-index: 99;
+  opacity: 1;
+  visibility: visible;
 }
 .app-popup__content {
   display: flex;
@@ -1431,11 +1447,87 @@ header .header__app .btn {
   padding: 40px;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 20px;
   border-radius: 40px;
   background: var(--white-60, rgba(255, 255, 255, 0.6));
   box-shadow: 0 4px 40px 0 rgba(0, 0, 0, 0.05);
+}
+.app-popup__title {
+  font-size: 34px;
+  font-weight: 500;
+}
+.app-popup__text {
+  color: var(--vulcan-40);
+  font-size: 16px;
+  font-weight: 500;
+}
+.app-popup__qr {
+  width: 260px;
+  height: 260px;
+  margin: 20px auto;
+}
+.app-popup__controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+}
+.app-popup__btn {
+  display: flex;
+  padding: 16px 24px;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+  flex: 1 0 0;
+  border-radius: 1440px;
+  font-size: 16px;
+  font-weight: 500;
+  height: 51px;
+}
+.app-popup__btn--1 {
+  background: var(--main-10, rgba(0, 138, 255, 0.1));
+  color: var(--main-100);
+}
+.app-popup__btn--2 {
+  background: var(--main-100, #008AFF);
+  color: var(--white-100);
+}
+.app-popup__icons {
+  display: flex;
+  padding: 0 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+  padding-top: 20px;
+  border-top: 1px solid var(--vulcan-4);
+}
+.app-popup__links {
+  padding-top: 20px;
+  border-top: 1px solid var(--vulcan-4);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.app-popup__links a {
+  display: flex;
+  padding: 8px 8px 8px 24px;
+  align-items: center;
+  gap: 12px;
+  flex: 1 0 0;
+  border-radius: 12px;
+  background: var(--main-100, #008AFF);
+  color: var(--white-100, #FFF);
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+.app-popup__links a span {
+  margin: auto;
+}
+.app-popup__links a img {
+  width: 40px;
+  height: 40px;
 }
 
 footer {
@@ -1444,6 +1536,248 @@ footer {
   color: var(--vulcan-60);
   font-size: 16px;
   opacity: 0.33;
+}
+
+.bottom-panel {
+  display: none;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
+  background: var(--BG, #F0F0F0);
+  padding: 8px;
+}
+.bottom-panel .sidebar__nav {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.bottom-panel .sidebar__nav-item {
+  width: calc(25% - 9px);
+}
+.bottom-panel .sidebar__nav-item a {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+@media (max-width: 767px) {
+  .main-width {
+    padding: 0 8px;
+  }
+  header .header {
+    height: 52px;
+  }
+  header .header__logo {
+    width: auto;
+  }
+  header .header__search {
+    width: 36px;
+  }
+  header .header__search input {
+    display: none;
+  }
+  header .header__langs {
+    display: none;
+  }
+  header .header__themes-switcher {
+    display: none;
+  }
+  header .header__app span:first-child {
+    display: none;
+  }
+  .sidebar {
+    display: none;
+  }
+  .content {
+    padding: 8px 0;
+  }
+  .slider {
+    height: 670px;
+  }
+  .slider__wrapper {
+    width: 100%;
+    left: 0;
+  }
+  .slider .swiper-container {
+    padding: 0;
+  }
+  .slider .swiper-slide {
+    width: 100% !important;
+  }
+  .slider .slide {
+    padding-top: 230px;
+  }
+  .slider .slide:before {
+    background-position: top center;
+    margin: auto;
+    width: 90%;
+    height: 90%;
+    top: 20px;
+  }
+  .slider .slide:after {
+    height: 600px;
+    background: linear-gradient(0deg, #008AFF 41.66%, rgba(0, 138, 255, 0) 75.75%);
+  }
+  .slider .slide__player {
+    width: 240px;
+    height: auto;
+    top: 50px;
+    bottom: auto;
+  }
+  .slider .slide__player--1 {
+    z-index: 1;
+    width: 240px;
+  }
+  .slider .slide__player--2 {
+    width: 223px;
+  }
+  .slider .slide__content {
+    gap: 13px;
+  }
+  .slider .slide__match-title {
+    display: none;
+  }
+  .slider .slide__match-date {
+    display: none;
+  }
+  .slider .slide__mobile {
+    display: flex;
+  }
+  .slider .slide__match-scores {
+    flex-direction: column;
+  }
+  .slider .slide__timer div div {
+    font-size: 20px;
+    height: 24px;
+  }
+  .slider .slide__controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  .slider .slide__btn {
+    width: 100%;
+  }
+  .sports {
+    padding: 12px 0;
+  }
+  .sports__tab {
+    padding: 0 16px 16px;
+  }
+  .sports__tab:nth-child(n+4) {
+    display: none;
+  }
+  .sports .match {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 112px;
+    gap: 8px;
+  }
+  .sports .match--cricket {
+    flex-wrap: nowrap;
+    height: auto;
+  }
+  .sports .match--cricket .match-status {
+    margin: 8px auto;
+  }
+  .sports .match .team {
+    order: 0;
+  }
+  .sports .match .team--2 {
+    order: 1;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .sports .match .team span {
+    order: 2;
+  }
+  .sports .match .time {
+    order: 2;
+    flex-direction: column;
+    height: 100%;
+    padding: 12px 4px 4px 4px;
+    justify-content: space-between;
+    width: 42%;
+    margin-left: auto;
+  }
+  .sports .match .time strong {
+    margin: auto;
+  }
+  .sports .match .time .watch, .sports .match .time .hightlights {
+    padding: 8px 12px 8px 4px;
+    width: 100%;
+    border-radius: 12px;
+  }
+  .sports .match__cricket {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 112px;
+    gap: 8px;
+  }
+  .app-banner {
+    flex-direction: column;
+    height: auto;
+  }
+  .app-banner__content {
+    padding: 20px;
+    max-width: 100%;
+  }
+  .app-banner__text br {
+    display: none;
+  }
+  .app-banner__controls {
+    width: 100%;
+  }
+  .app-banner__btn {
+    flex: 1;
+  }
+  .app-banner__btn div {
+    margin: auto;
+  }
+  .app-banner__image {
+    position: relative;
+    width: auto;
+    height: auto;
+    max-width: 104%;
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+  .app-banner:after {
+    background: url(images/app-bg-mob.webp) right bottom no-repeat;
+  }
+  .news {
+    padding: 0;
+  }
+  .news__heading {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 8px;
+    gap: 0;
+  }
+  .news__topics {
+    padding: 16px 0 0;
+    max-width: 95vw;
+  }
+  .news__list {
+    gap: 8px;
+  }
+  .news__item {
+    min-width: calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+  .news__content {
+    padding: 4px 12px 12px 12px;
+  }
+  .bottom-panel {
+    display: block;
+  }
 }
 
 /*# sourceMappingURL=styles.css.map */

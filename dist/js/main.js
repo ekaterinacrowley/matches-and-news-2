@@ -195,3 +195,80 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим элементы
+    const popup = document.querySelector('.app-popup');
+    const downloadBtn = document.querySelector('.app-popup__btn--2');
+    const qrContent = document.querySelector('.app-popup__content--qr');
+    const androidContent = document.querySelector('.app-popup__content--android');
+    const iosContent = document.querySelector('.app-popup__content--ios');
+    
+    // Функция для определения операционной системы
+    function getOS() {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const platform = window.navigator.platform.toLowerCase();
+        
+        if (/iphone|ipad|ipod/.test(userAgent)) return 'ios';
+        if (/mac/.test(platform) && navigator.maxTouchPoints > 1) return 'ios';
+        if (/mac/.test(platform)) return 'mac';
+        if (/android/.test(userAgent)) return 'android';
+        if (/win/.test(platform)) return 'windows';
+        
+        return 'android';
+    }
+
+    // Функция показа попапа
+    function showPopup() {
+        popup.classList.add('open');
+        document.body.style.overflow = 'hidden'; // Блокируем скролл страницы
+        
+        // Сбрасываем к исходному состоянию (показываем QR блок)
+        qrContent.style.display = 'flex';
+        androidContent.style.display = 'none';
+        iosContent.style.display = 'none';
+    }
+
+    // Функция скрытия попапа
+    function hidePopup() {
+        popup.classList.remove('open');
+        document.body.style.overflow = ''; // Восстанавливаем скролл
+    }
+
+    // Обработчик для ссылок с классом app-link
+    document.querySelectorAll('.app-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            showPopup();
+        });
+    });
+
+    // Обработчик для кнопки "Download Now"
+    downloadBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const os = getOS();
+        
+        // Скрываем QR блок и показываем соответствующий блок загрузки
+        qrContent.style.display = 'none';
+        if (os === 'ios' || os === 'mac') {
+            iosContent.style.display = 'flex';
+        } else {
+            androidContent.style.display = 'flex';
+        }
+    });
+
+    // Закрытие попапа при клике вне контента
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+            hidePopup();
+        }
+    });
+
+    // Закрытие при нажатии Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && popup.classList === 'open') {
+            hidePopup();
+        }
+    });
+});

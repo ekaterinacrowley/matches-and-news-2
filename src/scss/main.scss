@@ -94,11 +94,6 @@ p {
     background: var(--main-100, #008AFF); 
     color: var(--white-100);
     font-weight: 500;
-
-    &:hover {
-      background: #EB172D;
-    }
-    
 }
 
 h2 {
@@ -136,5 +131,6 @@ h2 {
 @import 'tab';
 @import 'teams';
 @import 'app-popup';
-@import 'footer';
- 
+@import 'footer'; 
+@import 'bottom-panel';
+@import 'mobile';
