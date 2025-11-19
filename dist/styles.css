@@ -17,9 +17,14 @@
 }
 [data-theme=light] .telegram-banner {
   background: url(images/telegram-bg.webp) center no-repeat;
+  background-size: contain;
 }
 [data-theme=light] .sidebar__app {
   background: url(images/sidebar-app.webp) center no-repeat;
+  background-size: contain;
+}
+[data-theme=light] .sidebar__nav--leagues .sidebar__nav-item:first-child img {
+  filter: grayscale(100) brightness(0);
 }
 
 [data-theme=dark] {
@@ -40,6 +45,7 @@
 }
 [data-theme=dark] .telegram-banner {
   background: url(images/telegram-bg-dark.webp) center no-repeat;
+  background-size: contain;
 }
 [data-theme=dark] .tab__header img {
   background: #fff;
@@ -50,6 +56,7 @@
 }
 [data-theme=dark] .sidebar__app {
   background: url(images/sidebar-app-dark.webp) center no-repeat;
+  background-size: contain;
 }
 
 * {
@@ -78,6 +85,7 @@ body {
   overflow-x: hidden;
   background: var(--bg);
   color: var(--vulcan);
+  scroll-behavior: smooth;
 }
 
 main {
@@ -334,7 +342,7 @@ header .header__app .btn {
   width: 275px;
   min-width: 275px;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
   align-self: stretch;
   height: fit-content;
@@ -350,6 +358,9 @@ header .header__app .btn {
 .sidebar__nav--leagues {
   gap: 16px;
 }
+.sidebar__nav--leagues .sidebar__nav-item a:hover {
+  color: var(--vulcan);
+}
 .sidebar__nav-item a {
   display: flex;
   align-items: center;
@@ -360,10 +371,10 @@ header .header__app .btn {
   fill: var(--vulcan-40, rgba(255, 255, 255, 0.4));
 }
 .sidebar__nav-item a:hover {
-  color: var(--main-100, #008AFF);
+  color: var(--vulcan-60);
 }
 .sidebar__nav-item a:hover svg {
-  fill: var(--main-100, #008AFF);
+  fill: var(--vulcan-60);
   fill-opacity: 1;
 }
 .sidebar__nav-item a img {
@@ -404,6 +415,11 @@ header .header__app .btn {
   border-bottom: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
   color: var(--vulcan-40, #595D6E);
   line-height: 1.2;
+  cursor: pointer;
+}
+.sidebar__tab-button:hover {
+  color: var(--vulcan-60);
+  border-bottom: 1px solid var(--vulcan-60);
 }
 .sidebar__tab-button--active {
   color: var(--vulcan, #090A12);
@@ -413,15 +429,20 @@ header .header__app .btn {
   margin-left: -15px;
   width: 259px;
   height: 165px;
+  border-radius: 20px;
 }
 
 .slider {
-  width: 1160px;
-  overflow: hidden;
-  margin-left: -40px;
-  margin-right: -40px;
-  padding-bottom: 25px;
+  width: 100%;
+  height: 403px;
   position: relative;
+}
+.slider__wrapper {
+  position: absolute;
+  width: 1140px;
+  left: -40px;
+  overflow: hidden;
+  padding-bottom: 25px;
 }
 .slider .slide {
   position: relative;
@@ -456,6 +477,8 @@ header .header__app .btn {
   position: absolute;
   bottom: 0;
   z-index: 0;
+  width: 360px;
+  height: 340px;
 }
 .slider .slide__player--1 {
   left: 0;
@@ -477,6 +500,10 @@ header .header__app .btn {
   display: flex;
   align-items: center;
   gap: 24px;
+}
+.slider .slide__team {
+  width: 120px;
+  height: 120px;
 }
 .slider .slide__match {
   display: flex;
@@ -570,7 +597,7 @@ header .header__app .btn {
 }
 
 .swiper-slide {
-  width: 1082px !important;
+  width: 1060px !important;
   display: flex;
 }
 .swiper-slide .slide {
@@ -629,16 +656,17 @@ header .header__app .btn {
   border-bottom: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
   font-size: 22px;
   font-weight: 500;
-  opacity: 0.4;
   cursor: pointer;
   transition: all 0.3s ease;
+  color: var(--vulcan-40);
 }
 .sports__tab--active {
   border-bottom: 1px solid var(--vulcan, #090A12);
-  opacity: 1;
+  color: var(--vulcan);
 }
 .sports__tab:hover {
-  opacity: 1;
+  color: var(--vulcan-60);
+  border-bottom: 1px solid var(--vulcan-60);
 }
 .sports__content {
   display: none;
@@ -667,7 +695,7 @@ header .header__app .btn {
   color: var(--vulcan);
 }
 .sports .date-picker button.active, .sports .date-picker button:hover {
-  border: 1px solid var(--main-100, #008AFF);
+  border: 1px solid var(--vulcan-40);
   color: var(--main-100);
 }
 .sports .leagues {
@@ -681,6 +709,9 @@ header .header__app .btn {
   column-gap: 24px;
   padding: 20px 0;
   border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
+}
+.sports .leagues p {
+  padding-top: 20px;
 }
 .sports .league {
   display: flex;
@@ -849,6 +880,8 @@ header .header__app .btn {
   right: 0;
   z-index: 1;
   max-width: 60%;
+  width: 629px;
+  height: 365px;
 }
 .app-banner__title {
   display: flex;
@@ -1067,7 +1100,7 @@ header .header__app .btn {
 .news__btn {
   display: flex;
   padding: 4px 4px 4px 24px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 24px;
   border-radius: 12px;
@@ -1104,6 +1137,7 @@ header .header__app .btn {
   width: 100%;
   height: 239px;
   padding: 40px;
+  border-radius: 24px;
 }
 .telegram-banner__title {
   color: var(--white-100, #FFF);
@@ -1274,9 +1308,11 @@ header .header__app .btn {
 }
 .tab__form .form-badge.win {
   background: url(images/win.webp) center no-repeat;
+  background-size: contain;
 }
 .tab__form .form-badge.lose {
   background: url(images/lose.webp) center no-repeat;
+  background-size: contain;
 }
 .tab__form .form-badge.draw {
   background: grey;
@@ -1345,7 +1381,7 @@ header .header__app .btn {
   display: flex;
   align-items: center;
   gap: 20px;
-  max-width: 1046px;
+  max-width: 1027px;
   margin-right: -30px;
   overflow-x: auto;
   /* Обязательные свойства для работы скролла */
@@ -1374,6 +1410,32 @@ header .header__app .btn {
   flex-shrink: 0;
   border-radius: 104px;
   background: var(--main-4, rgba(0, 138, 255, 0.04));
+}
+
+.app-popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(40px);
+  z-index: 99;
+}
+.app-popup__content {
+  display: flex;
+  width: 600px;
+  padding: 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border-radius: 40px;
+  background: var(--white-60, rgba(255, 255, 255, 0.6));
+  box-shadow: 0 4px 40px 0 rgba(0, 0, 0, 0.05);
 }
 
 footer {

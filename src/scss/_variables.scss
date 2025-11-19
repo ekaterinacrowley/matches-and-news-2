@@ -16,10 +16,15 @@
 
     .telegram-banner {
         background: url(images/telegram-bg.webp) center no-repeat;
+            background-size: contain;
     }
 
     .sidebar__app {
         background: url(images/sidebar-app.webp) center no-repeat;
+            background-size: contain;
+    }
+    .sidebar__nav--leagues .sidebar__nav-item:first-child img {
+        filter: grayscale(100)  brightness(0);
     }
 }
 
@@ -41,6 +46,7 @@
 
     .telegram-banner {
         background: url(images/telegram-bg-dark.webp) center no-repeat;
+            background-size: contain;
     }
 
     .tab__header img {
@@ -54,5 +60,6 @@
 
     .sidebar__app {
         background: url(images/sidebar-app-dark.webp) center no-repeat;
+            background-size: contain;
     }
 }

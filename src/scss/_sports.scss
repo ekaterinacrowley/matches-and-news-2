@@ -20,18 +20,19 @@
         border-bottom: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
         font-size: 22px;
         font-weight: 500;
-        opacity: 0.4;
         cursor: pointer;
         transition: all .3s ease;
+        color: var(--vulcan-40);
         
 
         &--active {
             border-bottom: 1px solid var(--vulcan, #090A12);
-            opacity: 1;
+            color: var(--vulcan);
         }
 
         &:hover {
-            opacity: 1;
+            color: var(--vulcan-60);
+            border-bottom: 1px solid var(--vulcan-60);
         }
     }
 
@@ -64,7 +65,7 @@
         color: var(--vulcan);
 
         &.active, &:hover  {
-            border: 1px solid var(--main-100, #008AFF);
+           border: 1px solid var(--vulcan-40);
             color: var(--main-100);
         }
     }
@@ -80,6 +81,10 @@
             column-gap: 24px;
             padding: 20px 0;
             border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
+        }
+
+        p {
+            padding-top: 20px;
         }
     }
   .league {

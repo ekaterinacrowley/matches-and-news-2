@@ -26,6 +26,7 @@ body {
   overflow-x: hidden; 
   background: var(--bg);
   color: var(--vulcan);
+  scroll-behavior: smooth;
 }
 
 main {  
@@ -134,5 +135,6 @@ h2 {
 @import 'telegram-banner';
 @import 'tab';
 @import 'teams';
+@import 'app-popup';
 @import 'footer';
  

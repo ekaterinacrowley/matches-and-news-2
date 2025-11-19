@@ -123,4 +123,25 @@
     themeSwitcher.addEventListener("click", toggleTheme);
     initTheme();
   });
+  document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.addEventListener("click", function(e) {
+      const link = e.target.closest('.sidebar__nav-item a[href^="#"]');
+      if (!link)
+        return;
+      e.preventDefault();
+      document.querySelectorAll(".sidebar__nav-item").forEach((item) => {
+        item.classList.remove("sidebar__nav-item--current");
+      });
+      link.closest(".sidebar__nav-item").classList.add("sidebar__nav-item--current");
+      const targetId = link.getAttribute("href");
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    });
+  });
 })();

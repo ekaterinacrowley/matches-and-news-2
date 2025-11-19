@@ -7,7 +7,7 @@
     width: 275px;
     min-width: 275px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 16px;
     align-self: stretch;  
     height: fit-content;
@@ -22,6 +22,10 @@
 
         &--leagues {
             gap: 16px;
+
+            .sidebar__nav-item a:hover {
+                color: var(--vulcan);
+            }
         }
 
     }
@@ -39,10 +43,10 @@
                 }
                 
                 &:hover {
-                    color: var(--main-100, #008AFF);
+                   color: var(--vulcan-60);
 
                     svg {
-                            fill: var(--main-100, #008AFF);
+                            fill: var(--vulcan-60);
                             fill-opacity: 1;
                         }
                 }
@@ -81,7 +85,7 @@
         display: flex;
         align-items: center;
         justify-content: space-around;
-        margin-bottom: 28px;;
+        margin-bottom: 28px;
     }
 
     &__tab-button {
@@ -94,6 +98,12 @@
         border-bottom: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
         color: var(--vulcan-40, #595D6E);
         line-height: 1.2;
+        cursor: pointer;
+
+        &:hover {
+             color: var(--vulcan-60);
+             border-bottom: 1px solid var(--vulcan-60);
+        }
 
         &--active {
             color: var(--vulcan, #090A12);
@@ -105,5 +115,6 @@
             margin-left: -15px;
             width: 259px;
             height: 165px;
+            border-radius: 20px;
     }
 }

@@ -163,3 +163,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Инициализируем тему
     initTheme();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.querySelector('.sidebar');
+  
+  // Обработчик клика на сайдбар (делегирование событий)
+  sidebar.addEventListener('click', function(e) {
+    const link = e.target.closest('.sidebar__nav-item a[href^="#"]');
+    
+    if (!link) return;
+    
+    e.preventDefault();
+    
+    // Убираем класс у всех элементов
+    document.querySelectorAll('.sidebar__nav-item').forEach(item => {
+      item.classList.remove('sidebar__nav-item--current');
+    });
+    
+    // Добавляем класс текущему элементу
+    link.closest('.sidebar__nav-item').classList.add('sidebar__nav-item--current');
+    
+    // Плавный скролл
+    const targetId = link.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});

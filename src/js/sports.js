@@ -111,7 +111,7 @@ async function loadMatches() {
   const fixedDates = getFixedDates();
   await Promise.all([
     loadFootballMatches(currentDates.football),
-    loadCricketMatches(currentDates.cricket),
+    loadCricketMatches(currentDates.cricket), 
     loadBasketballMatches(currentDates.football),
     loadVolleyballMatches(currentDates.football)
   ]);
@@ -214,17 +214,17 @@ async function loadFootballMatches(dateStr) {
   // Если передана дата как строка, используем её, если объект Date - форматируем
   const dateToLoad = typeof dateStr === 'string' ? dateStr : formatDate(dateStr);
   
-  footballContainer.innerHTML = "<p>Загрузка...</p>";
+  footballContainer.innerHTML = "<p>...</p>";
   try {
     const data = await fetchWithCache(`/matches/football?date=${dateToLoad}`, `${CACHE_KEYS.FOOTBALL}_${dateToLoad}`);
     
     if (!data.response || data.response.length === 0) {
-      footballContainer.innerHTML = `<p>Нет матчей на ${dateToLoad}</p>`;
+      footballContainer.innerHTML = `<p>No matches ${dateToLoad}</p>`;
       return;
     }
     renderFootball(data.response);
   } catch (e) {
-    footballContainer.innerHTML = "<p>Ошибка загрузки</p>";
+    footballContainer.innerHTML = "<p>Error</p>";
     console.error(e);
   }
 }
@@ -312,28 +312,31 @@ function renderFootball(matches) {
 
 // --- Крикет ---
 async function loadCricketMatches(dateStr) {
-  // console.log("=== loadCricketMatches START ===");
-  // console.log("Received date parameter:", dateStr);
-  // console.log("cricketContainer:", cricketContainer);
+  // Если передана дата как строка, используем её, если объект Date - форматируем
+  const dateToLoad = typeof dateStr === 'string' ? dateStr : formatDate(dateStr);
+  
+  console.log("=== loadCricketMatches START ===");
+  console.log("Received date parameter:", dateStr);
+  console.log("Date to load:", dateToLoad);
   
   cricketContainer.innerHTML = "<p>Загрузка...</p>";
   try {
-    const data = await fetchWithCache(`/matches/cricket?date=${dateStr}`, `${CACHE_KEYS.CRICKET}_${dateStr}`);
-    // console.log("Cricket API response:", data);
+    const data = await fetchWithCache(`/matches/cricket?date=${dateToLoad}`, `${CACHE_KEYS.CRICKET}_${dateToLoad}`);
+    console.log("Cricket API response:", data);
     
     if (!data.data || data.data.length === 0) {
       console.log("No matches found or empty array");
-      cricketContainer.innerHTML = "<p>Нет матчей</p>";
+      cricketContainer.innerHTML = "<p>No matches</p>";
       return;
     }
     
-    // console.log(`Found ${data.data.length} matches, proceeding to render`);
-    renderCricket(data.data, dateStr);
+    console.log(`Found ${data.data.length} matches, proceeding to render`);
+    renderCricket(data.data, dateToLoad);
   } catch (e) {
     console.error("Error loading matches:", e);
-    cricketContainer.innerHTML = "<p>Ошибка загрузки</p>";
+    cricketContainer.innerHTML = "<p>Error</p>";
   }
-  // console.log("=== loadCricketMatches END ===");
+  console.log("=== loadCricketMatches END ===");
 }
 
 function sortAndGroupMatches(matches) {
@@ -429,24 +432,24 @@ function renderCricket(matches, selectedDate) {
     } else {
       console.log(`✗ No matches found for selected date: "${selectedDate}"`);
       console.log("Available dates are:", Object.keys(groupedMatches));
-      cricketContainer.innerHTML = `<p>Нет матчей.</p>`;
+      cricketContainer.innerHTML = `<p>No matches.</p>`;
     }
   } catch (error) {
     console.error("Error in renderCricket:", error);
-    cricketContainer.innerHTML = "<p>Ошибка при отображении матчей</p>";
+    cricketContainer.innerHTML = "<p>Error</p>";
   }
 }
 
 // --- Баскетбол ---
 async function loadBasketballMatches(dateStr) {
-  basketballContainer.innerHTML = "<p>Загрузка...</p>";
+  basketballContainer.innerHTML = "<p>...</p>";
   try {
     const data = await fetchWithCache(`/matches/basketball?date=${dateStr}`, `${CACHE_KEYS.BASKETBALL}_${dateStr}`);
     console.log("Basketball API response:", data);
 
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
-      basketballContainer.innerHTML = "<p>Нет матчей</p>";
+      basketballContainer.innerHTML = "<p>No matches</p>";
       return;
     }
 
@@ -490,20 +493,20 @@ async function loadBasketballMatches(dateStr) {
 
   } catch (e) {
     console.error("Basketball fetch error:", e);
-    basketballContainer.innerHTML = "<p>Ошибка загрузки</p>";
+    basketballContainer.innerHTML = "<p>Error</p>";
   }
 }
 
 // --- Волейбол ---
 async function loadVolleyballMatches(dateStr) {
-  volleyballContainer.innerHTML = "<p>Загрузка...</p>";
+  volleyballContainer.innerHTML = "<p>...</p>";
   try {
     const data = await fetchWithCache(`/matches/volleyball?date=${dateStr}`, `${CACHE_KEYS.VOLLEYBALL}_${dateStr}`);
-    // console.log("Volleyball API response:", data);
+    console.log("Volleyball API response:", data);
 
     const leagues = Array.isArray(data.data) ? data.data.slice(0, 3) : [];
     if (leagues.length === 0) {
-      volleyballContainer.innerHTML = "<p>Нет матчей</p>";
+      volleyballContainer.innerHTML = "<p>No matches</p>";
       return;
     }
 
@@ -546,7 +549,7 @@ async function loadVolleyballMatches(dateStr) {
 
   } catch (e) {
     console.error("Volleyball fetch error:", e);
-    volleyballContainer.innerHTML = "<p>Ошибка загрузки</p>";
+    volleyballContainer.innerHTML = "<p>Error</p>";
   }
 }
 

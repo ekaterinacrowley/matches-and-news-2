@@ -1,10 +1,15 @@
 .slider {
-    width: 1160px;
-    overflow: hidden;
-    margin-left: -40px;
-    margin-right: -40px;
-    padding-bottom: 25px;
+    width: 100%;
+    height: 403px;
     position: relative;
+
+    &__wrapper {
+        position: absolute;
+        width: 1140px;
+        left: -40px;
+        overflow: hidden;
+        padding-bottom: 25px;
+    }
 
 
     .slide {
@@ -43,6 +48,8 @@
             position: absolute;
             bottom: 0;
             z-index: 0;
+            width: 360px;
+            height: 340px;
 
             &--1 {
                 left: 0;
@@ -68,6 +75,11 @@
             display: flex;
             align-items: center;
             gap: 24px;
+        }
+
+        &__team {
+            width: 120px;
+            height: 120px;
         }
 
         &__match {
@@ -177,7 +189,7 @@
 }
 
 .swiper-slide {
-    width: 1082px !important;
+    width: 1060px !important;
     display: flex;
     
     .slide {

@@ -188,9 +188,11 @@
 
              &.win {
                 background: url(images/win.webp) center no-repeat;
+                background-size: contain;
              }
             &.lose {
                 background: url(images/lose.webp) center no-repeat; 
+                background-size: contain;
              }
 
             &.draw {
