@@ -3,8 +3,20 @@
     .main-width {
         padding: 0 8px;;
     }
+    
+    body {
+        padding-top: 52px;
+    }
 
-    header .header {
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 98;
+        background: var(--bg);
+
+    .header {
         height: 52px;
 
         &__logo {
@@ -35,9 +47,35 @@
             }
         }
     }
+}
 
     .sidebar {
-        display: none;
+        position: fixed;
+        top: 52px;
+        bottom: 52px;
+        left: - 110vw;
+        transition: all .3s ease;
+        z-index: 89;
+        height: auto;
+        width: 100vw;
+        background: rgba(255, 255, 255, 0.90);
+        backdrop-filter: blur(40px);
+        padding: 28px 16px 16px 16px;
+
+        .header__controls {
+            display: flex;
+            margin-top: 28px;
+            justify-content: flex-start;
+        }
+
+        &.open {
+            left: 0;
+        }
+
+        > .sidebar__nav .sidebar__nav-item:first-child, > .sidebar__nav .sidebar__nav-item:nth-child(2),  > .sidebar__nav .sidebar__nav-item:nth-child(3) {
+            display: none;
+        }
+
     }
 
     .content {
@@ -58,6 +96,10 @@
         }
         .swiper-slide {
             width: 100% !important;
+        }
+
+        .swiper-slide-prev .slide, .swiper-slide-next .slide {
+            margin: 0;
         }
 
         .slide {
@@ -264,7 +306,7 @@
 
         &__topics {
             padding: 16px 0 0;
-             max-width: 95vw;
+             max-width: 92vw;
         }
 
         &__list {
@@ -282,7 +324,111 @@
 
     }
 
+    .telegram-banner {
+        height: 497px;
+        padding: 20px;
+        justify-content: flex-start;
+        gap: 20px;
+
+        &__btn {
+            width: 100%;
+        }
+    }
+
+    .tab {
+        padding: 0;
+        gap: 20px;
+
+        &__league {
+            padding-top: 12px;
+        }
+
+        &__head {
+            padding-right: 20px;
+        }
+        
+        &__body {
+            padding-right: 10px;
+        }
+
+        &__head > div:last-child, &__form {
+            display: none;
+        }
+
+        &__club {
+            width: 90%;
+
+             > div:first-child {
+                width: 30px;
+             }
+        }
+
+        &__digits {
+            width: auto;
+
+            div:first-child, div:nth-child(2), div:nth-child(3) {
+                display: none;
+            }
+        }
+
+        &__link {
+            font-size: 0;
+        }
+
+        &__colors {
+            padding: 8px 0 12px;
+        }
+    }
+
+    .teams {
+        padding: 0 0 12px;
+
+        &__heading {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            padding-top: 8px;
+        }
+
+        &__topics {
+            padding: 16px 0 0;
+            max-width: 92vw; 
+        }
+
+        &__container {
+             max-width: 92vw; 
+             gap: 8px;
+        }
+
+        &__item {
+            width: 80px;
+            height: 80px;
+            padding: 20px;
+        }
+    }
+
+    footer {
+        padding: 40px 8px 100px;
+    }
+
+
+    .app-popup {
+        &__content {
+            width: 95vw;
+            padding: 20px;
+        }
+
+        &__title {
+            font-size: 22px;
+        }
+
+        &__btn {
+            padding: 16px 8px;
+        }
+    }
+
     .bottom-panel {
         display: block;
+        z-index: 98;
     }
 }

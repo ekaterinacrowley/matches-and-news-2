@@ -90,9 +90,7 @@
     }
   });
   document.addEventListener("DOMContentLoaded", function() {
-    const themeSwitcher = document.querySelector(".header__themes-switcher");
-    const darkIcon = document.querySelector(".header__theme-icon--dark");
-    const lightIcon = document.querySelector(".header__theme-icon--light");
+    const themeSwitchers = document.querySelectorAll(".header__themes-switcher");
     const body = document.body;
     function getSavedTheme() {
       return localStorage.getItem("theme") || "light";
@@ -100,15 +98,31 @@
     function saveTheme(theme) {
       localStorage.setItem("theme", theme);
     }
+    function updateFavicon(theme) {
+      const favicon = document.querySelector('link[rel="icon"]');
+      if (favicon) {
+        const faviconPath = theme === "dark" ? "images/favicon-dark.png" : "images/favicon-light.png";
+        favicon.href = faviconPath;
+      }
+    }
     function applyTheme(theme) {
       body.setAttribute("data-theme", theme);
-      if (theme === "dark") {
-        darkIcon.classList.add("header__theme-icon--active");
-        lightIcon.classList.remove("header__theme-icon--active");
-      } else {
-        lightIcon.classList.add("header__theme-icon--active");
-        darkIcon.classList.remove("header__theme-icon--active");
-      }
+      updateFavicon(theme);
+      themeSwitchers.forEach((switcher) => {
+        const darkIcon = switcher.querySelector(".header__theme-icon--dark");
+        const lightIcon = switcher.querySelector(".header__theme-icon--light");
+        if (theme === "dark") {
+          if (darkIcon)
+            darkIcon.classList.add("header__theme-icon--active");
+          if (lightIcon)
+            lightIcon.classList.remove("header__theme-icon--active");
+        } else {
+          if (lightIcon)
+            lightIcon.classList.add("header__theme-icon--active");
+          if (darkIcon)
+            darkIcon.classList.remove("header__theme-icon--active");
+        }
+      });
     }
     function toggleTheme() {
       const currentTheme = body.getAttribute("data-theme") || getSavedTheme();
@@ -120,7 +134,9 @@
       const savedTheme = getSavedTheme();
       applyTheme(savedTheme);
     }
-    themeSwitcher.addEventListener("click", toggleTheme);
+    themeSwitchers.forEach((switcher) => {
+      switcher.addEventListener("click", toggleTheme);
+    });
     initTheme();
   });
   document.addEventListener("DOMContentLoaded", function() {
@@ -132,6 +148,7 @@
       e.preventDefault();
       document.querySelectorAll(".sidebar__nav-item").forEach((item) => {
         item.classList.remove("sidebar__nav-item--current");
+        sidebar.classList.remove("open");
       });
       link.closest(".sidebar__nav-item").classList.add("sidebar__nav-item--current");
       const targetId = link.getAttribute("href");
@@ -201,6 +218,13 @@
       if (e.key === "Escape" && popup.classList === "open") {
         hidePopup();
       }
+    });
+  });
+  document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.querySelector(".sidebar");
+    const sidebrLink = document.querySelector(".open-nav");
+    sidebrLink.addEventListener("click", function(e) {
+      sidebar.classList.toggle("open");
     });
   });
 })();

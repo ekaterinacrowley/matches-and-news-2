@@ -15,8 +15,14 @@
     --white-60: rgba(255, 255, 255, 0.6); /* #FFFFFF, 60% */
 
     .telegram-banner {
-        background: url(images/telegram-bg.webp) center no-repeat;
-            background-size: contain;
+        background: url(images/telegram-bg.webp) right center no-repeat;
+            background-size: cover;
+
+             @media (max-width: 767px) {
+                 background: url(images/telegram-bg-mob.webp) center no-repeat;
+                 background-size: cover;
+
+            }
     }
 
     .sidebar__app {
@@ -25,6 +31,10 @@
     }
     .sidebar__nav--leagues .sidebar__nav-item:first-child img {
         filter: grayscale(100)  brightness(0);
+    }
+
+    .app-popup {
+        background: rgba(255, 255, 255, 0.9);
     }
 }
 
@@ -45,8 +55,13 @@
     --white-60: rgba(9, 23, 39, 0.6); /* #091727, 60% */
 
     .telegram-banner {
-        background: url(images/telegram-bg-dark.webp) center no-repeat;
-            background-size: contain;
+        background: url(images/telegram-bg-dark.webp) right center no-repeat;
+            background-size: cover;
+
+            @media (max-width: 767px) {
+                 background: url(images/telegram-bg-dark-mob.webp) center no-repeat;
+                 background-size: cover;
+                }
     }
 
     .tab__header img {
@@ -58,8 +73,18 @@
         filter: brightness(100);
     } 
 
+    .sidebar {
+        @media (max-width: 767px) {
+            background: rgba(0, 0, 0, 0.9);
+        }
+    }
+
     .sidebar__app {
         background: url(images/sidebar-app-dark.webp) center no-repeat;
             background-size: contain;
+    }
+
+    .app-popup {
+        background: rgba(0, 0, 0, 0.9);
     }
 }

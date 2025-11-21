@@ -16,8 +16,14 @@
   --white-60: rgba(255, 255, 255, 0.6); /* #FFFFFF, 60% */
 }
 [data-theme=light] .telegram-banner {
-  background: url(images/telegram-bg.webp) center no-repeat;
-  background-size: contain;
+  background: url(images/telegram-bg.webp) right center no-repeat;
+  background-size: cover;
+}
+@media (max-width: 767px) {
+  [data-theme=light] .telegram-banner {
+    background: url(images/telegram-bg-mob.webp) center no-repeat;
+    background-size: cover;
+  }
 }
 [data-theme=light] .sidebar__app {
   background: url(images/sidebar-app.webp) center no-repeat;
@@ -25,6 +31,9 @@
 }
 [data-theme=light] .sidebar__nav--leagues .sidebar__nav-item:first-child img {
   filter: grayscale(100) brightness(0);
+}
+[data-theme=light] .app-popup {
+  background: rgba(255, 255, 255, 0.9);
 }
 
 [data-theme=dark] {
@@ -44,8 +53,14 @@
   --white-60: rgba(9, 23, 39, 0.6); /* #091727, 60% */
 }
 [data-theme=dark] .telegram-banner {
-  background: url(images/telegram-bg-dark.webp) center no-repeat;
-  background-size: contain;
+  background: url(images/telegram-bg-dark.webp) right center no-repeat;
+  background-size: cover;
+}
+@media (max-width: 767px) {
+  [data-theme=dark] .telegram-banner {
+    background: url(images/telegram-bg-dark-mob.webp) center no-repeat;
+    background-size: cover;
+  }
 }
 [data-theme=dark] .tab__header img {
   background: #fff;
@@ -54,9 +69,17 @@
 [data-theme=dark] .tab__league:after, [data-theme=dark] .tab__link:after {
   filter: brightness(100);
 }
+@media (max-width: 767px) {
+  [data-theme=dark] .sidebar {
+    background: rgba(0, 0, 0, 0.9);
+  }
+}
 [data-theme=dark] .sidebar__app {
   background: url(images/sidebar-app-dark.webp) center no-repeat;
   background-size: contain;
+}
+[data-theme=dark] .app-popup {
+  background: rgba(0, 0, 0, 0.9);
 }
 
 * {
@@ -189,7 +212,7 @@ header {
   justify-content: center;
   border-bottom: 1px solid var(--vulcan-4);
 }
-header .header {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -198,18 +221,18 @@ header .header {
   background: transparent;
   z-index: 1;
 }
-header .header__logo {
+.header__logo {
   width: 315px;
   font-size: 18px;
   font-weight: 500;
 }
-header .header__content {
+.header__content {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-header .header__search {
+.header__search {
   display: flex;
   width: 327px;
   padding: 10px;
@@ -219,10 +242,10 @@ header .header__search {
   border-radius: 12px;
   background: var(--white-60);
 }
-header .header__search svg {
+.header__search svg {
   fill: var(--vulcan-40, rgba(255, 255, 255, 0.4));
 }
-header .header__search input {
+.header__search input {
   border: none;
   outline: none;
   background: transparent;
@@ -230,23 +253,23 @@ header .header__search input {
   font-size: 14px;
   color: var(--vulcan-900);
 }
-header .header__search input::placeholder {
+.header__search input::placeholder {
   color: var(--vulcan-40);
 }
-header .header__controls {
+.header__controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 32px;
 }
-header .header__langs {
+.header__langs {
   display: flex;
   align-items: center;
   gap: 4px;
   border-radius: 100px;
   border: 1px solid var(--vulcan-10);
 }
-header .header__lang {
+.header__lang {
   display: flex;
   padding: 4px;
   align-items: center;
@@ -254,10 +277,10 @@ header .header__lang {
   border-radius: 80px;
   border: 1px solid transparent;
 }
-header .header__lang--active {
+.header__lang--active {
   border: 1px solid var(--main-100, #008AFF);
 }
-header .header__themes-switcher {
+.header__themes-switcher {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -265,7 +288,7 @@ header .header__themes-switcher {
   border: 1px solid var(--vulcan-10);
   cursor: pointer;
 }
-header .header__theme-icon {
+.header__theme-icon {
   display: flex;
   padding: 4px;
   align-items: center;
@@ -273,24 +296,24 @@ header .header__theme-icon {
   border-radius: 80px;
   border: 1px solid transparent;
 }
-header .header__theme-icon svg {
+.header__theme-icon svg {
   fill: var(--vulcan-40, rgba(255, 255, 255, 0.4));
   width: 24px;
   height: 24px;
 }
-header .header__theme-icon--active {
+.header__theme-icon--active {
   border: 1px solid var(--main-100, #008AFF);
 }
-header .header__theme-icon--active svg {
+.header__theme-icon--active svg {
   fill: var(--main-100, #008AFF);
   fill-opacity: 1;
 }
-header .header__notifications {
+.header__notifications {
   display: flex;
   align-items: center;
   gap: 4px;
 }
-header .header__notifications span {
+.header__notifications span {
   display: flex;
   width: 20px;
   min-width: 20px;
@@ -303,28 +326,28 @@ header .header__notifications span {
   background: var(--main-100, #008AFF);
   color: var(--white-100, #FFFFFF);
 }
-header .header__notifications svg {
+.header__notifications svg {
   fill: var(--vulcan-40, rgba(255, 255, 255, 0.4));
   width: 24px;
   height: 24px;
 }
-header .header__app {
+.header__app {
   display: flex;
   align-items: center;
   border-radius: 12px;
   background: var(--main-4);
 }
-header .header__app span {
+.header__app span {
   display: flex;
   padding: 8px 12px;
   justify-content: center;
   align-items: center;
   color: var(--main-100, #008AFF);
 }
-header .header__app span + span {
+.header__app span + span {
   color: var(--white-100, #FFFFFF);
 }
-header .header__app .btn {
+.header__app .btn {
   padding: 6px 12px;
   font-size: 14px;
 }
@@ -426,6 +449,9 @@ header .header__app .btn {
   width: 259px;
   height: 165px;
   border-radius: 20px;
+}
+.sidebar .header__controls {
+  display: none;
 }
 
 .slider {
@@ -1545,7 +1571,7 @@ footer {
   bottom: 0;
   right: 0;
   border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
-  background: var(--BG, #F0F0F0);
+  background: var(--bg);
   padding: 8px;
 }
 .bottom-panel .sidebar__nav {
@@ -1563,10 +1589,24 @@ footer {
   gap: 8px;
   font-size: 12px;
 }
+.bottom-panel svg path {
+  stroke: var(--vulcan-40, rgba(255, 255, 255, 0.4));
+}
 
 @media (max-width: 767px) {
   .main-width {
     padding: 0 8px;
+  }
+  body {
+    padding-top: 52px;
+  }
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 98;
+    background: var(--bg);
   }
   header .header {
     height: 52px;
@@ -1590,6 +1630,27 @@ footer {
     display: none;
   }
   .sidebar {
+    position: fixed;
+    top: 52px;
+    bottom: 52px;
+    left: -110vw;
+    transition: all 0.3s ease;
+    z-index: 89;
+    height: auto;
+    width: 100vw;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(40px);
+    padding: 28px 16px 16px 16px;
+  }
+  .sidebar .header__controls {
+    display: flex;
+    margin-top: 28px;
+    justify-content: flex-start;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .sidebar > .sidebar__nav .sidebar__nav-item:first-child, .sidebar > .sidebar__nav .sidebar__nav-item:nth-child(2), .sidebar > .sidebar__nav .sidebar__nav-item:nth-child(3) {
     display: none;
   }
   .content {
@@ -1607,6 +1668,9 @@ footer {
   }
   .slider .swiper-slide {
     width: 100% !important;
+  }
+  .slider .swiper-slide-prev .slide, .slider .swiper-slide-next .slide {
+    margin: 0;
   }
   .slider .slide {
     padding-top: 230px;
@@ -1763,7 +1827,7 @@ footer {
   }
   .news__topics {
     padding: 16px 0 0;
-    max-width: 95vw;
+    max-width: 92vw;
   }
   .news__list {
     gap: 8px;
@@ -1775,8 +1839,87 @@ footer {
   .news__content {
     padding: 4px 12px 12px 12px;
   }
+  .telegram-banner {
+    height: 497px;
+    padding: 20px;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  .telegram-banner__btn {
+    width: 100%;
+  }
+  .tab {
+    padding: 0;
+    gap: 20px;
+  }
+  .tab__league {
+    padding-top: 12px;
+  }
+  .tab__head {
+    padding-right: 20px;
+  }
+  .tab__body {
+    padding-right: 10px;
+  }
+  .tab__head > div:last-child, .tab__form {
+    display: none;
+  }
+  .tab__club {
+    width: 90%;
+  }
+  .tab__club > div:first-child {
+    width: 30px;
+  }
+  .tab__digits {
+    width: auto;
+  }
+  .tab__digits div:first-child, .tab__digits div:nth-child(2), .tab__digits div:nth-child(3) {
+    display: none;
+  }
+  .tab__link {
+    font-size: 0;
+  }
+  .tab__colors {
+    padding: 8px 0 12px;
+  }
+  .teams {
+    padding: 0 0 12px;
+  }
+  .teams__heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-top: 8px;
+  }
+  .teams__topics {
+    padding: 16px 0 0;
+    max-width: 92vw;
+  }
+  .teams__container {
+    max-width: 92vw;
+    gap: 8px;
+  }
+  .teams__item {
+    width: 80px;
+    height: 80px;
+    padding: 20px;
+  }
+  footer {
+    padding: 40px 8px 100px;
+  }
+  .app-popup__content {
+    width: 95vw;
+    padding: 20px;
+  }
+  .app-popup__title {
+    font-size: 22px;
+  }
+  .app-popup__btn {
+    padding: 16px 8px;
+  }
   .bottom-panel {
     display: block;
+    z-index: 98;
   }
 }
 

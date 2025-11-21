@@ -5,7 +5,7 @@
     bottom: 0;
     right: 0;
     border-top: 1px solid var(--vulcan-4, rgba(9, 10, 18, 0.05));
-    background: var(--BG, #F0F0F0); 
+    background: var(--bg); 
     padding: 8px;
 
     .sidebar__nav {
@@ -24,5 +24,9 @@
         align-items: center; 
         gap: 8px;
         font-size: 12px;
+    }
+
+    svg path {
+        stroke: var(--vulcan-40, rgba(255, 255, 255, 0.4));
     }
 }

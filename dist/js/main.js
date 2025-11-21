@@ -113,9 +113,7 @@ document.querySelectorAll('.slide__content').forEach(slide => {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const themeSwitcher = document.querySelector('.header__themes-switcher');
-    const darkIcon = document.querySelector('.header__theme-icon--dark');
-    const lightIcon = document.querySelector('.header__theme-icon--light');
+    const themeSwitchers = document.querySelectorAll('.header__themes-switcher');
     const body = document.body;
 
     // Функция для получения текущей темы из localStorage
@@ -128,18 +126,37 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('theme', theme);
     }
 
+    // Функция для смены фавикона
+    function updateFavicon(theme) {
+        const favicon = document.querySelector('link[rel="icon"]');
+        if (favicon) {
+            const faviconPath = theme === 'dark' 
+                ? 'images/favicon-dark.png' 
+                : 'images/favicon-light.png';
+            favicon.href = faviconPath;
+        }
+    }
+
     // Функция для применения темы
     function applyTheme(theme) {
         body.setAttribute('data-theme', theme);
         
-        // Обновляем видимость иконок
-        if (theme === 'dark') {
-            darkIcon.classList.add('header__theme-icon--active');
-            lightIcon.classList.remove('header__theme-icon--active');
-        } else {
-            lightIcon.classList.add('header__theme-icon--active');
-            darkIcon.classList.remove('header__theme-icon--active');
-        }
+        // Обновляем фавикон
+        updateFavicon(theme);
+        
+        // Обновляем видимость иконок во всех переключателях
+        themeSwitchers.forEach(switcher => {
+            const darkIcon = switcher.querySelector('.header__theme-icon--dark');
+            const lightIcon = switcher.querySelector('.header__theme-icon--light');
+            
+            if (theme === 'dark') {
+                if (darkIcon) darkIcon.classList.add('header__theme-icon--active');
+                if (lightIcon) lightIcon.classList.remove('header__theme-icon--active');
+            } else {
+                if (lightIcon) lightIcon.classList.add('header__theme-icon--active');
+                if (darkIcon) darkIcon.classList.remove('header__theme-icon--active');
+            }
+        });
     }
 
     // Функция для переключения темы
@@ -157,12 +174,15 @@ document.addEventListener('DOMContentLoaded', function() {
         applyTheme(savedTheme);
     }
 
-    // Добавляем обработчик клика на переключатель
-    themeSwitcher.addEventListener('click', toggleTheme);
+    // Добавляем обработчики клика на все переключатели
+    themeSwitchers.forEach(switcher => {
+        switcher.addEventListener('click', toggleTheme);
+    });
 
     // Инициализируем тему
     initTheme();
 });
+
 
 document.addEventListener('DOMContentLoaded', function() {
   const sidebar = document.querySelector('.sidebar');
@@ -178,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Убираем класс у всех элементов
     document.querySelectorAll('.sidebar__nav-item').forEach(item => {
       item.classList.remove('sidebar__nav-item--current');
+      sidebar.classList.remove('open');
     });
     
     // Добавляем класс текущему элементу
@@ -271,4 +292,14 @@ document.addEventListener('DOMContentLoaded', function() {
             hidePopup();
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.querySelector('.sidebar');
+  const sidebrLink = document.querySelector('.open-nav');
+
+  sidebrLink.addEventListener('click', function(e) {
+    sidebar.classList.toggle('open');
+  });
+
 });
